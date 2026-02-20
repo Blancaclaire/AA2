@@ -1,94 +1,66 @@
-<template>
-  <BForm
-    v-if="show"
-    @submit="onSubmit"
-    @reset="onReset"
-  >
-    <BFormGroup
-      id="input-group-1"
-      label="Email address:"
-      label-for="input-1"
-      description="We'll never share your email with anyone else."
-    >
-      <BFormInput
-        id="input-1"
-        v-model="form.email"
-        type="email"
-        placeholder="Enter email"
-        required
-      />
-    </BFormGroup>
-
-    <BFormGroup
-      id="input-group-2"
-      label="Your Name:"
-      label-for="input-2"
-    >
-      <BFormInput
-        id="input-2"
-        v-model="form.name"
-        placeholder="Enter name"
-        required
-      />
-    </BFormGroup>
-    <BFormGroup
-      id="input-group-3"
-      label="Food:"
-      label-for="input-3"
-    >
-      <BFormSelect
-        id="input-3"
-        v-model="form.food"
-        :options="foods"
-        required
-      />
-    </BFormGroup>
-
-    <BButton
-      type="submit"
-      variant="primary"
-      >Submit</BButton
-    >
-  </BForm>
-
-  <BCard
-    class="mt-3"
-    header="Form Data Result"
-  >
-    <pre class="m-0">{{ form }}</pre>
-  </BCard>
-</template>
-
 <script setup lang="ts">
-import {nextTick, reactive, ref} from 'vue'
+import { ref } from 'vue'
 
-const foods = [{text: 'Select One', value: null}, 'Carrots', 'Beans', 'Tomatoes', 'Corn']
+// Definimos el evento que el hijo enviará al padre
+const emit = defineEmits<{
+  (e: 'submit-login', payload: any): void
+}>()
 
-const form = reactive({
+const showPassword = ref(false)
+const form = ref({
   email: '',
-  name: '',
-  food: null,
-  checked: [],
+  password: ''
 })
-const show = ref(true)
 
-const onSubmit = (event: Event) => {
-  event.preventDefault()
-  // eslint-disable-next-line no-alert
-  alert(JSON.stringify(form))
-}
-
-const onReset = (event: Event) => {
-  event.preventDefault()
-  // Reset our form values
-  form.email = ''
-  form.name = ''
-  form.food = null
-  form.checked = []
-  // Trick to reset/clear native browser form validation state
-  show.value = false
-  nextTick(() => {
-    show.value = true
-  })
+const handleSubmit = () => {
+  // Enviamos los datos al componente padre
+  emit('submit-login', { ...form.value })
 }
 </script>
+
+<template>
+  <b-card 
+    header="Acceso al Sistema" 
+    header-bg-variant="primary" 
+    header-text-variant="white"
+    class="shadow-sm"
+  >
+    <b-form @submit.prevent="handleSubmit">
+      <b-form-group label="Correo Electrónico:" label-for="input-email" class="mb-3">
+        <b-form-input
+          id="input-email"
+          v-model="form.email"
+          type="email"
+          placeholder="ejemplo@correo.com"
+          required
+        ></b-form-input>
+      </b-form-group>
+
+      <b-form-group label="Contraseña:" label-for="input-password" class="mb-3">
+        <b-input-group>
+          <b-form-input
+            id="input-password"
+            v-model="form.password"
+            :type="showPassword ? 'text' : 'password'"
+            placeholder="Ingresa tu contraseña"
+            required
+          ></b-form-input>
+          <b-input-group-text>
+            <b-button 
+              variant="link" 
+              class="p-0 text-decoration-none" 
+              @click="showPassword = !showPassword"
+            >
+              <span v-if="showPassword">Ocultar</span>
+              <span v-else>Mostrar</span>
+            </b-button>
+          </b-input-group-text>
+        </b-input-group>
+      </b-form-group>
+
+      <b-button type="submit" variant="primary" class="w-100">
+        Iniciar Sesión
+      </b-button>
+    </b-form>
+  </b-card>
+</template>
