@@ -1,19 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-// Definimos el evento que el hijo enviará al padre
-const emit = defineEmits<{
-  (e: 'submit-login', payload: any): void
-}>()
+const emit = defineEmits(['submit-login'])
 
 const showPassword = ref(false)
+
+//Datos del formulario
 const form = ref({
   email: '',
   password: ''
 })
 
-const handleSubmit = () => {
-  // Enviamos los datos al componente padre
+const enviarDatos = () => {
   emit('submit-login', { ...form.value })
 }
 </script>
@@ -25,7 +23,7 @@ const handleSubmit = () => {
     header-text-variant="white"
     class="shadow-sm"
   >
-    <b-form @submit.prevent="handleSubmit">
+    <b-form @submit.prevent="enviarDatos">
       <b-form-group label="Correo Electrónico:" label-for="input-email" class="mb-3">
         <b-form-input
           id="input-email"
@@ -58,9 +56,9 @@ const handleSubmit = () => {
         </b-input-group>
       </b-form-group>
 
-      <b-button type="submit" variant="primary" class="w-100">
-        Iniciar Sesión
-      </b-button>
+    <b-button @click="enviarDatos" variant="primary" class="w-100 mt-3">
+      Inicio Sesión
+    </b-button>
     </b-form>
   </b-card>
 </template>

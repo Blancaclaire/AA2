@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import LoginForm from '@/components/LoginFormComponent.vue'
+import LoginFormComponent from '@/components/LoginFormComponent.vue'
+import { useAuthStore } from '@/stores/AuthStore'
 
+
+const authStore = useAuthStore()
 const handleLoginAction = (data: any) => {
-  console.log('Login data:', data)
+  authStore.login(data)
 }
 </script>
 
@@ -33,8 +36,12 @@ const handleLoginAction = (data: any) => {
             <h2 class="display-5 fw-bold text-dark">Bienvenido</h2>
             <p class="text-muted fs-5">Introduce tus credenciales para acceder</p>
           </div>
+
+          <b-alert v-if="authStore.error" variant="danger" show dismissible class="mb-4">
+            {{ authStore.error }}
+          </b-alert>
           
-          <LoginForm @submit-login="handleLoginAction" />
+          <login-form-component @submit-login="handleLoginAction" :disabled="authStore.loading"></login-form-component>
           
           <p class="mt-5 text-center text-muted small">
             &copy; 2024 CursosApp S.L. Todos los derechos reservados.
@@ -44,6 +51,9 @@ const handleLoginAction = (data: any) => {
 
     </b-row>
   </b-container>
+
+
+
 </template>
 
 <style scoped>
