@@ -1,13 +1,24 @@
 <script setup lang="ts">
 import LoginFormComponent from '@/components/LoginFormComponent.vue'
+import router from '@/router'
 import { useAuthStore } from '@/stores/AuthStore'
 import { RouterLink } from 'vue-router'
 
 
 const authStore = useAuthStore()
-const handleLoginAction = (data: any) => {
-  authStore.login(data)
+
+
+ const handleLoginAction = async (data: any) => {
+  await authStore.login(data)
+  if (authStore.isAuthenticated) {
+    if (authStore.role === 'admin' || authStore.role === 'instructor') {
+      router.push('/admin/dashboard')
+    } else {
+      router.push('/')
+    }
+  }
 }
+
 </script>
 
 <template>
@@ -42,7 +53,7 @@ const handleLoginAction = (data: any) => {
             {{ authStore.error }}
           </b-alert>
           
-          <login-form-component @submit-login="handleLoginAction" :disabled="authStore.loading"></login-form-component>
+          <login-form-component @submit-login="handleLoginAction"></login-form-component>
 
 
           <p class="handleRegister">¿No tienes una cuenta? <router-link to="/register"> Registrate</router-link></p>
