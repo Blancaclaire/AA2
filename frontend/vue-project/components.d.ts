@@ -39,6 +39,7 @@ declare module 'vue' {
     BRow: typeof import('bootstrap-vue-next/components/BContainer')['BRow']
     LoginFormComponent: typeof import('./src/components/LoginFormComponent.vue')['default']
     NavComponent: typeof import('./src/components/NavComponent.vue')['default']
+    RegisterFormComponent: typeof import('./src/components/RegisterFormComponent.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
