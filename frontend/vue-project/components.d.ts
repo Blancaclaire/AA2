@@ -11,6 +11,8 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AdminFooter: typeof import('./src/components/AdminFooter.vue')['default']
+    AdminHeader: typeof import('./src/components/AdminHeader.vue')['default']
     BAlert: typeof import('bootstrap-vue-next/components/BAlert')['BAlert']
     BButton: typeof import('bootstrap-vue-next/components/BButton')['BButton']
     BCard: typeof import('bootstrap-vue-next/components/BCard')['BCard']
@@ -37,6 +39,7 @@ declare module 'vue' {
     BNavItem: typeof import('bootstrap-vue-next/components/BNav')['BNavItem']
     BNavItemDropdown: typeof import('bootstrap-vue-next/components/BNav')['BNavItemDropdown']
     BRow: typeof import('bootstrap-vue-next/components/BContainer')['BRow']
+    FooterComponent: typeof import('./src/components/FooterComponent.vue')['default']
     LoginFormComponent: typeof import('./src/components/LoginFormComponent.vue')['default']
     NavComponent: typeof import('./src/components/NavComponent.vue')['default']
     RegisterFormComponent: typeof import('./src/components/RegisterFormComponent.vue')['default']

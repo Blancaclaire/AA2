@@ -43,7 +43,7 @@ const handleRegisterAction = (data: any) => {
           
           <register-form-component @submit-register="handleRegisterAction" :disabled="authStore.loading"></register-form-component>
 
-          <p class="handleRegister">¿Ya tienes una cuenta? <router-link to="/">Inicia sesión</router-link></p>
+          <p class="handleRegister">¿Ya tienes una cuenta? <router-link to="/login">Inicia sesión</router-link></p>
           
           <p class="mt-5 text-center text-muted small">
             &copy; 2024 CursosApp S.L. Todos los derechos reservados.
