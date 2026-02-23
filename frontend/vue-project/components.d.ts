@@ -45,6 +45,7 @@ declare module 'vue' {
     BNavItemDropdown: typeof import('bootstrap-vue-next/components/BNav')['BNavItemDropdown']
     BRow: typeof import('bootstrap-vue-next/components/BContainer')['BRow']
     CourseCard: typeof import('./src/components/CourseCard.vue')['default']
+    CoursesFilter: typeof import('./src/components/CoursesFilter.vue')['default']
     FooterComponent: typeof import('./src/components/FooterComponent.vue')['default']
     ListCoursesComponent: typeof import('./src/components/ListCoursesComponent.vue')['default']
     LoginFormComponent: typeof import('./src/components/LoginFormComponent.vue')['default']

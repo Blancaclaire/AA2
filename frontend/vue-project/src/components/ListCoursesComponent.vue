@@ -5,8 +5,8 @@ defineProps<{ courses: any[] }>()
 </script>
 
 <template>
-  <b-row>
-    <b-col v-for="course in courses" :key="course.id" md="4">
+  <b-row class="g-4">
+    <b-col v-for="course in courses" :key="course.id" md="6" lg="4">
       <CourseCard :course="course" />
     </b-col>
   </b-row>

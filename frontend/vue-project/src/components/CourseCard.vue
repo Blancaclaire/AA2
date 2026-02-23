@@ -1,47 +1,83 @@
 <script setup lang="ts">
 defineProps<{ course: any }>()
+
+const levelColor = (level: string) => {
+  switch (level) {
+    case 'Beginner': return 'success'
+    case 'Intermediate': return 'warning'
+    case 'Advanced': return 'danger'
+    default: return 'secondary'
+  }
+}
 </script>
 
 <template>
-  <b-card class="mb-4 shadow-sm h-100 border-0">
-    <b-card-img
-      v-if="course.imageUrl"
-      :src="course.imageUrl"
-      top
-      style="height: 180px; object-fit: cover;"
-    />
-    <div v-else class="bg-primary bg-opacity-10 d-flex align-items-center justify-content-center" style="height: 180px;">
-      <span class="text-primary fs-1">📚</span>
+  <b-card class="mb-4 h-100 border-0 course-card" no-body>
+    <div class="card-header-colored" :class="`level-${course.level?.toLowerCase()}`">
+      <div class="d-flex justify-content-between align-items-start p-3">
+        <b-badge variant="light" class="text-dark">{{ course.categoryName }}</b-badge>
+        <b-badge :variant="levelColor(course.level)">{{ course.level }}</b-badge>
+      </div>
+      <div class="text-center pb-3">
+        <span class="display-6">📚</span>
+      </div>
     </div>
 
-    <b-card-body>
-      <div class="d-flex justify-content-between align-items-start mb-2">
-        <b-badge variant="info">{{ course.categoryName }}</b-badge>
-        <b-badge variant="secondary">{{ course.level }}</b-badge>
-      </div>
+    <b-card-body class="d-flex flex-column">
+      <b-card-title class="fs-5 mb-1">{{ course.title }}</b-card-title>
+      <p class="text-muted small mb-3">por {{ course.instructor }}</p>
 
-      <b-card-title class="fs-5">{{ course.title }}</b-card-title>
+      <p class="text-secondary small flex-grow-1" style="min-height: 40px;">
+        {{ course.description?.length > 100 ? course.description.substring(0, 100) + '...' : course.description }}
+      </p>
 
-      <b-card-text class="text-muted" style="min-height: 48px;">
-        {{ course.description?.length > 80 ? course.description.substring(0, 80) + '...' : course.description }}
-      </b-card-text>
-
-      <div class="text-muted small mb-2">
-        <span>👨‍🏫 {{ course.instructor }}</span>
-        <span class="ms-3">⏱ {{ course.durationHours }}h</span>
-      </div>
-
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <span class="text-warning">
-          ⭐ {{ course.rating > 0 ? course.rating.toFixed(1) : 'Sin valorar' }}
-        </span>
-        <span class="text-muted small">{{ course.enrollmentCount }} estudiantes</span>
-      </div>
-
-      <div class="d-flex justify-content-between align-items-center">
-        <span class="fs-4 fw-bold text-primary">{{ course.price }}€</span>
-        <b-button variant="primary" size="sm">Ver detalles</b-button>
+      <div class="border-top pt-3 mt-auto">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="small">
+            <span class="text-warning">⭐</span>
+            {{ course.rating > 0 ? course.rating.toFixed(1) : '—' }}
+          </span>
+          <span class="small text-muted">⏱ {{ course.durationHours }}h</span>
+          <span class="small text-muted">👥 {{ course.enrollmentCount }}</span>
+        </div>
+        <div class="text-end">
+          <span class="fs-4 fw-bold text-primary">{{ course.price }}€</span>
+        </div>
       </div>
     </b-card-body>
   </b-card>
 </template>
+
+<style scoped>
+.course-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.course-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card-header-colored {
+  min-height: 120px;
+}
+
+.level-beginner {
+  background: linear-gradient(135deg, #d4edda 0%, #a3d9a5 100%);
+}
+
+.level-intermediate {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffc107 40%);
+}
+
+.level-advanced {
+  background: linear-gradient(135deg, #f8d7da 0%, #e57373 100%);
+}
+
+.level-undefined {
+  background: linear-gradient(135deg, #e2e3e5 0%, #adb5bd 100%);
+}
+</style>

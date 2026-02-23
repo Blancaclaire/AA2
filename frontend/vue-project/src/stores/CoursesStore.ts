@@ -11,13 +11,13 @@ state:()=>({
 
 actions:{
 
-    async getCourses(){
+    async getCourses(params = {}){
         this.loading = true
         this.error = null
         try{
-            const res = await api.get('/courses')
-
+            const res = await api.get('/courses', { params })
             this.courses = res.data.items
+            
         }catch (err: any) {
         this.error = err.response?.data?.message || 'Error al cargar cursos'
       } finally {
