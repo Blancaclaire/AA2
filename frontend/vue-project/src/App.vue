@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { RouterView, useRoute } from 'vue-router'
 import { useUIStore } from '@/stores/UIStore'
-import NavComponent from '@/components/NavComponent.vue'
-import FooterComponent from '@/components/FooterComponent.vue'
-import AdminHeader from '@/components/AdminHeader.vue'
+import NavComponent from '@/components/publicLayout/NavComponent.vue'
+import FooterComponent from '@/components/publicLayout/FooterComponent.vue'
+import AdminHeader from '@/components/adminLayout/AdminHeader.vue'
 import AdminFooter from '@/components/AdminFooter.vue'
 
 const route = useRoute()

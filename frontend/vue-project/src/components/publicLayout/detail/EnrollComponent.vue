@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { useCourseStore } from '@/stores/CoursesStore'
 import { useAuthStore } from '@/stores/AuthStore'
+import { useRoute, useRouter } from 'vue-router';
 
+const router = useRouter()
+const route = useRoute()
 const props = defineProps<{ courseId: number }>()
 const courseStore = useCourseStore()
 const authStore = useAuthStore()
@@ -9,6 +12,11 @@ const authStore = useAuthStore()
 const handleEnroll = () => {
   courseStore.enrollUser(props.courseId)
 }
+
+const handleToHome = ()=>{
+    router.push(`/`)
+}
+
 </script>
 
 <template>
@@ -54,8 +62,8 @@ const handleEnroll = () => {
           />
         </div>
 
-        <BButton variant="success" size="lg" class="w-100 fw-bold" pill>
-          Continuar aprendiendo →
+        <BButton variant="success" size="lg" class="w-100 fw-bold" pill @click="handleToHome" >
+          Continuar aprendiendo
         </BButton>
       </template>
 
