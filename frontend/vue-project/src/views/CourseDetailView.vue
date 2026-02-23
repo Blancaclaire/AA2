@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import CourseHeroComponent from '@/components/CourseHeroComponent.vue'
+import EnrollComponent from '@/components/EnrollComponent.vue'
 import { useCourseStore } from '@/stores/CoursesStore'
 import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -7,10 +8,10 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
 const courseStore = useCourseStore()
-const id = Number(route.params.id)
+const courseId = Number(route.params.id)
 
 onMounted(() => {
-  courseStore.getCoursesById(id)
+  courseStore.getCoursesById(courseId)
 })
 
 const levelColor = (level: string) => {
@@ -33,6 +34,7 @@ const levelColor = (level: string) => {
   <!-- DETAIL -->
   <div v-else-if="courseStore.course" class="detail-page">
     <CourseHeroComponent :course="courseStore.course"></CourseHeroComponent>
+    <EnrollComponent :course-id="courseId"></EnrollComponent>
   </div>
 </template>
 

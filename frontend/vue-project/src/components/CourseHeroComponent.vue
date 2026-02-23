@@ -13,12 +13,12 @@ const levelColor = (level: string) => {
   }
 }
 
+
 </script>
 
 <template>
   <div class="hero">
     <div class="hero-inner">
-      <button class="btn-back" @click="router.back()">← Volver</button>
 
       <div class="hero-meta">
         <span class="category-tag">{{ course.categoryName }}</span>
@@ -53,8 +53,6 @@ const levelColor = (level: string) => {
         </div>
       </div>
     </div>
-
-    <div class="hero-deco">📚</div>
   </div>
 </template>
 
@@ -91,22 +89,6 @@ const levelColor = (level: string) => {
   opacity: 0.12;
   z-index: 0;
   pointer-events: none;
-}
-
-.btn-back {
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.3);
-  color: white;
-  border-radius: 8px;
-  padding: 0.4rem 1rem;
-  font-size: 0.85rem;
-  cursor: pointer;
-  margin-bottom: 1.5rem;
-  transition: background 0.2s;
-}
-
-.btn-back:hover {
-  background: rgba(255,255,255,0.25);
 }
 
 .hero-meta {
