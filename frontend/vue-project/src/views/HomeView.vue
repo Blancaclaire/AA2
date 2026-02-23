@@ -6,6 +6,7 @@ import ListCoursesComponent from '@/components/ListCoursesComponent.vue'
 
 const courseStore = useCourseStore()
 
+//Ejecuta código cuando el componente aparece por primera vez
 onMounted(() => {
     courseStore.getCourses()
 })

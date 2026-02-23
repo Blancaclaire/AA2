@@ -13,7 +13,7 @@ const levelColor = (level: string) => {
 
 <template>
   <b-card class="mb-4 h-100 border-0 course-card" no-body>
-    <div class="card-header-colored" :class="`level-${course.level?.toLowerCase()}`">
+    <div class="card-header-colored">
       <div class="d-flex justify-content-between align-items-start p-3">
         <b-badge variant="light" class="text-dark">{{ course.categoryName }}</b-badge>
         <b-badge :variant="levelColor(course.level)">{{ course.level }}</b-badge>
@@ -41,7 +41,7 @@ const levelColor = (level: string) => {
           <span class="small text-muted">👥 {{ course.enrollmentCount }}</span>
         </div>
         <div class="text-end">
-          <span class="fs-4 fw-bold text-primary">{{ course.price }}€</span>
+          <span class="fs-4 fw-bold card-price">{{ course.price }}€</span>
         </div>
       </div>
     </b-card-body>
@@ -58,26 +58,16 @@ const levelColor = (level: string) => {
 
 .course-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgba(34, 34, 196, 0.15);
 }
 
 .card-header-colored {
   min-height: 120px;
+  background: linear-gradient(135deg, #eef1ff 0%, #dce1ff 100%);
+  border-bottom: 1px solid #c5cdff;
 }
 
-.level-beginner {
-  background: linear-gradient(135deg, #d4edda 0%, #a3d9a5 100%);
-}
-
-.level-intermediate {
-  background: linear-gradient(135deg, #fff3cd 0%, #ffc107 40%);
-}
-
-.level-advanced {
-  background: linear-gradient(135deg, #f8d7da 0%, #e57373 100%);
-}
-
-.level-undefined {
-  background: linear-gradient(135deg, #e2e3e5 0%, #adb5bd 100%);
+.card-price {
+  color: #2222c4;
 }
 </style>
