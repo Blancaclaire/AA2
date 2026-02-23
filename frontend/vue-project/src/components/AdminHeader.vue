@@ -8,7 +8,9 @@ const router = useRouter()
 
 const handleLogout = () => {
   authStore.logout()
-  router.push('/login')
+  setTimeout(() => {
+    router.push('/login')
+  }, 100)
 }
 </script>
 
