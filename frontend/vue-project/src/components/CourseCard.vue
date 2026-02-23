@@ -1,5 +1,10 @@
 <script setup lang="ts">
-defineProps<{ course: any }>()
+import { useRouter } from 'vue-router'
+
+
+const props = defineProps<{ course: any }>()
+
+const router = useRouter()
 
 const levelColor = (level: string) => {
   switch (level) {
@@ -8,6 +13,10 @@ const levelColor = (level: string) => {
     case 'Advanced': return 'danger'
     default: return 'secondary'
   }
+}
+
+const handleCourseDetail = () => {
+  router.push(`/detail/${props.course.id}`)
 }
 </script>
 
@@ -40,8 +49,12 @@ const levelColor = (level: string) => {
           <span class="small text-muted">⏱ {{ course.durationHours }}h</span>
           <span class="small text-muted">👥 {{ course.enrollmentCount }}</span>
         </div>
-        <div class="text-end">
+
+        <div class="d-flex justify-content-between align-items-center mt-2">
           <span class="fs-4 fw-bold card-price">{{ course.price }}€</span>
+          <button class="btn-detail" @click="handleCourseDetail">
+            Ver detalles
+          </button>
         </div>
       </div>
     </b-card-body>
@@ -69,5 +82,22 @@ const levelColor = (level: string) => {
 
 .card-price {
   color: #2222c4;
+}
+
+.btn-detail {
+  background: #2222c4;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn-detail:hover {
+  background: #1a1a9e;
+  transform: translateX(2px);
 }
 </style>

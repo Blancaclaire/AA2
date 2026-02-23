@@ -7,7 +7,7 @@ state:()=>({
     loading: false,
     error: null as string | null,
     courses: [] as any[],
-    course: null
+    course: null as any | null
 }),
 
 actions:{

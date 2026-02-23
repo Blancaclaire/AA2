@@ -5,26 +5,33 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     // --- Public ---
-  {
-    path: '/',
-    name: 'home',
-    meta: { layout: 'public' },
-    component: () => import('../views/HomeView.vue'),
-  },
+    {
+      path: '/',
+      name: 'home',
+      meta: { layout: 'public' },
+      component: () => import('../views/HomeView.vue'),
+    },
 
-  // --- Blank ---
-  {
-    path: '/login',
-    name: 'login',
-    meta: { layout: 'blank' },
-    component: () => import('../views/LoginView.vue'),
-  },
-  {
-    path: '/register',
-    name: 'register',
-    meta: { layout: 'blank' },
-    component: () => import('../views/RegisterView.vue'),
-  },
+    {
+      path: '/detail/:id',
+      name: 'detail',
+      meta: { layout: 'public' },
+      component: () => import('../views/CourseDetailView.vue'),
+    },
+
+    // --- Blank ---
+    {
+      path: '/login',
+      name: 'login',
+      meta: { layout: 'blank' },
+      component: () => import('../views/LoginView.vue'),
+    },
+    {
+      path: '/register',
+      name: 'register',
+      meta: { layout: 'blank' },
+      component: () => import('../views/RegisterView.vue'),
+    },
 
     {
       path: '/admin/dashboard',
@@ -54,14 +61,14 @@ const router = createRouter({
 })
 
 
-// router.beforeEach((to, from, next) => {
-//   const auth = useAuthStore()
+router.beforeEach((to, from, next) => {
+  const auth = useAuthStore()
 
-//   if (to.meta.requiresAuth && !auth.isAuthenticated) {
-//     next({ name: 'login' })
-//   } else {
-//     next()
-//   }
-// })
+  if (to.meta.requiresAuth && !auth.isAuthenticated) {
+    next({ name: 'login' })
+  } else {
+    next()
+  }
+})
 
 export default router
