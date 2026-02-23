@@ -25,7 +25,6 @@ export const useAuthStore = defineStore('AuthStore', {
         localStorage.setItem('token', res.data.token)
         localStorage.setItem('role', res.data.role)
         localStorage.setItem('userName', res.data.name)
-        console.log('hecho login')
       } catch (err: any) {
         this.error = err.response?.data?.message || 'Error de conexión'
       } finally {

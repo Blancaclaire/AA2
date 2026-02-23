@@ -1,20 +1,45 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
+import { useAuthStore  } from '@/stores/AuthStore';
+import router from '@/router';
+
+
 
 const route = useRoute()
+const authStore = useAuthStore();
+
+const handleLogout = ()=>{
+  authStore.logout()
+  router.push('/login')
+}
+
 </script>
 
 <template>
   <BNavbar v-b-color-mode="'dark'" toggleable="lg" variant="primary">
-    <BNavbarBrand :href="'/home'">CursosApp</BNavbarBrand>
+    <BNavbarBrand to="/">CursosApp</BNavbarBrand>
     <BNavbarToggle target="nav-collapse" />
     <BCollapse id="nav-collapse" is-nav>
       <BNavbarNav>
-        <BNavItem href="/home" :active="route.path === '/home'">Inicio</BNavItem>
-        <BNavItem href="/courses" :active="route.path === '/courses'">Cursos</BNavItem>
+        <BNavItem to="/" :active="route.path === '/'">Inicio</BNavItem>
       </BNavbarNav>
+
       <BNavbarNav class="ms-auto">
-        <BNavItem href="/login">Login</BNavItem>
+        <!-- Sin login -->
+        <template v-if="!authStore.isAuthenticated">
+          <BNavItem to="/login" :active="route.path === '/login'">Login</BNavItem>
+          <BNavItem to="/register" :active="route.path === '/register'">Registro</BNavItem>
+        </template>
+
+        <!-- Con login -->
+        <template v-else>
+          <BNavItem to="/my-courses" :active="route.path === '/my-courses'">Mis Cursos</BNavItem>
+          <BNavItem 
+            v-if="authStore.role === 'admin' || authStore.role === 'instructor'" 
+            to="/admin/dashboard"
+          >Admin</BNavItem>
+          <BNavItem @click="handleLogout">Cerrar Sesión</BNavItem>
+        </template>
       </BNavbarNav>
     </BCollapse>
   </BNavbar>
