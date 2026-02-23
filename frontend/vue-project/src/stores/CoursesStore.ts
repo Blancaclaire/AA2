@@ -7,6 +7,7 @@ state:()=>({
     loading: false,
     error: null as string | null,
     courses: [] as any[],
+    course: null
 }),
 
 actions:{
@@ -23,10 +24,28 @@ actions:{
       } finally {
         this.loading = false
       }
+    },
+
+    async getCoursesById(id : number){
+
+        this.loading = true
+        this.error = null
+        try{
+            const res = await api.get(`/courses/${id}`)
+            this.course = res.data
+        }catch(err: any) {
+        this.error = err.response?.data?.message || 'Error al cargar cursos'
+      } finally {
+        this.loading = false
+      }
+    },
+        
     }
 
-}
+
 
 })
+
+
 
 
