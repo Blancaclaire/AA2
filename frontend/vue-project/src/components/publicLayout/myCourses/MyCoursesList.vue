@@ -51,11 +51,12 @@ const completed = computed(() => props.courses.filter(c => c.isCompleted))
 .section-title {
   font-size: 1rem;
   font-weight: 700;
-  color: #111827;
+  color: var(--bs-body-color);
   display: flex;
   align-items: center;
 }
 .section-header {
+  border-bottom: 2px solid var(--bs-border-color);
   border-bottom: 2px solid #eef1ff;
   padding-bottom: 0.75rem;
 }

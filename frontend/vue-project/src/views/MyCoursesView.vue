@@ -18,8 +18,9 @@ watch(() => route.fullPath, loadCourses)
 
 <template>
 
-    <MyCoursesList :courses="userStore.courses"></MyCoursesList>
-
+  <div class="container py-4 mb-5"> 
+    <MyCoursesList :courses="userStore.courses" />
+  </div>
 
 </template>
 

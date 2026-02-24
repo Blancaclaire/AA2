@@ -66,6 +66,7 @@ const progressVariant = (percent: number) => {
   border-radius: 14px !important;
   overflow: hidden;
   transition: transform 0.2s, box-shadow 0.2s;
+  background-color: var(--bs-tertiary-bg) !important;
 }
 .course-card:hover {
   transform: translateY(-3px);
@@ -78,7 +79,7 @@ const progressVariant = (percent: number) => {
 .course-title {
   font-size: 0.97rem;
   font-weight: 700;
-  color: #111827;
+  color: var(--bs-body-color);
   line-height: 1.4;
 }
 </style>

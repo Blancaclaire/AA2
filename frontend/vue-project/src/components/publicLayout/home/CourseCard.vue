@@ -67,6 +67,7 @@ const handleCourseDetail = () => {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  background-color: var(--bs-tertiary-bg) !important;
 }
 
 .course-card:hover {
@@ -75,17 +76,16 @@ const handleCourseDetail = () => {
 }
 
 .card-header-colored {
-  min-height: 120px;
-  background: linear-gradient(135deg, #eef1ff 0%, #dce1ff 100%);
-  border-bottom: 1px solid #c5cdff;
+  background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(99,102,241,0.2) 100%);
+  border-bottom: 1px solid var(--bs-border-color);
 }
 
 .card-price {
-  color: #2222c4;
+  color: var(--bs-primary);
 }
 
 .btn-detail {
-  background: #2222c4;
+  background: var(--bs-primary); 
   color: white;
   border: none;
   border-radius: 8px;
@@ -97,7 +97,8 @@ const handleCourseDetail = () => {
 }
 
 .btn-detail:hover {
-  background: #1a1a9e;
+  background: var(--bs-primary);
+  filter: brightness(0.85);
   transform: translateX(2px);
 }
 </style>

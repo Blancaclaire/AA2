@@ -86,41 +86,41 @@ const clear = () => {
 
 <style scoped>
 .filter-card {
-  background: #F8F9FA;
-  border: 1px solid #c5cdff;
+  background: var(--bs-tertiary-bg);
+  border: 1px solid var(--bs-border-color);
   box-shadow: 0 2px 12px rgba(34, 34, 196, 0.08);
 }
 
 .filter-label {
-  color: #3a3a8a;
+  color: var(--bs-primary);
   font-weight: 600;
 }
 
 .filter-input {
-  background: white;
-  border: 1px solid #c5cdff;
-  color: #333;
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  color: var(--bs-body-color);
   border-radius: 8px;
 }
 
 .filter-input::placeholder {
-  color: #999;
+  color: var(--bs-secondary-color);
 }
 
 .filter-input:focus {
-  background: white;
-  border-color: #2222c4;
-  color: #333;
+  background: var(--bs-body-bg);
+  border-color: var(--bs-primary);
+  color: var(--bs-body-color);
   box-shadow: 0 0 0 0.2rem rgba(34, 34, 196, 0.15);
 }
 
 .filter-input option {
-  background: white;
-  color: #333;
+  background: var(--bs-body-bg);
+  color: var(--bs-body-color);
 }
 
 .btn-search {
-  background: #2222c4;
+  background: var(--bs-primary);
   border: none;
   color: white;
   border-radius: 8px;
@@ -128,19 +128,20 @@ const clear = () => {
 }
 
 .btn-search:hover {
-  background: #1a1a9e;
+  background: var(--bs-primary);
+  filter: brightness(0.85);
 }
 
 .btn-clear {
   background: transparent;
-  border: 1px solid #2222c4;
-  color: #2222c4;
+  border: 1px solid var(--bs-primary);
+  color: var(--bs-primary);
   border-radius: 8px;
   padding: 0.375rem 1rem;
 }
 
 .btn-clear:hover {
-  background: #2222c4;
+  background: var(--bs-primary);
   color: white;
 }
 </style>
