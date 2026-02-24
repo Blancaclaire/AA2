@@ -39,7 +39,7 @@ const cancelDelete = () => {
 </script>
 
 <template>
-  <div>
+  <div class="container py-4 mb-5">
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>

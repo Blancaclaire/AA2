@@ -99,6 +99,7 @@ const formatDate = (date: string | null) => {
 <style scoped>
 .user-card {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: var(--bs-tertiary-bg) !important;
 }
 
 .user-card:hover {

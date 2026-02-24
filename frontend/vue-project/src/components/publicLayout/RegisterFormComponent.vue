@@ -102,3 +102,9 @@ const enviarDatos = async () => {
     </b-form>
   </b-card>
 </template>
+
+<style scoped>
+.shadow-sm{
+background-color: var(--bs-tertiary-bg) !important;
+}
+</style>
