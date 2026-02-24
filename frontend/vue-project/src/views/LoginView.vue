@@ -9,15 +9,16 @@ const authStore = useAuthStore()
 
 
  const handleLoginAction = async (data: any) => {
-  await authStore.login(data)
-  if (authStore.isAuthenticated) {
+  const success = await authStore.login(data)
+  if (success) {
     if (authStore.role === 'admin' || authStore.role === 'instructor') {
-      router.push('/admin/dashboard')
+      await router.push('/admin/dashboard')
     } else {
-      router.push('/')
+      await router.push('/')
     }
   }
 }
+
 
 </script>
 

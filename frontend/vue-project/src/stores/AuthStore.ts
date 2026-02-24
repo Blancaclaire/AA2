@@ -28,8 +28,10 @@ export const useAuthStore = defineStore('AuthStore', {
         localStorage.setItem('token', res.data.token)
         localStorage.setItem('role', res.data.role)
         localStorage.setItem('userName', res.data.name)
+        return true
       } catch (err: any) {
         this.error = err.response?.data?.message || 'Error de conexión'
+        return false
       } finally {
         this.loading = false
       }
@@ -45,8 +47,10 @@ export const useAuthStore = defineStore('AuthStore', {
         localStorage.setItem('token', res.data.token)
         localStorage.setItem('role', res.data.role)
         localStorage.setItem('userName', res.data.name)
+        return true
       } catch (err: any) {
         this.error = err.response?.data?.message || 'Error de conexión'
+        return false
       } finally {
         this.loading = false
       }

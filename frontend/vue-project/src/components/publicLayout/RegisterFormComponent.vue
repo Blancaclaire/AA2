@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useAuthStore } from '@/stores/AuthStore'
 
+const authStore = useAuthStore()
 const emit = defineEmits(['submit-register'])
 const showPassword = ref(false)
+const isSubmitting = ref(false)
+const submitSuccess = ref(false)
 
 const form = ref({
   role: '',
@@ -11,16 +15,41 @@ const form = ref({
   password: ''
 })
 
-// Tip: Asegúrate de que los 'value' coincidan con lo que tu backend o NavComponent esperan (minúsculas)
 const roleOptions = ref([
   { value: '', text: 'Selecciona un rol' },
   { value: 'admin', text: 'Administrador' },
-  { value: 'instructor', text: 'Instructor' }, 
-  { value: 'student', text: 'Alumno' }
+  { value: 'instructor', text: 'Instructor' }
 ])
 
-const enviarDatos = () => {
-  emit('submit-register', { ...form.value })
+const enviarDatos = async () => {
+  isSubmitting.value = true
+  submitSuccess.value = false
+
+  const dataToSubmit = {
+    ...form.value,
+    role: authStore.role === 'admin' ? form.value.role : 'estudiante'
+  }
+
+  emit('submit-register', dataToSubmit)
+
+  await new Promise(resolve => setTimeout(resolve, 500))
+
+  isSubmitting.value = false
+  submitSuccess.value = true
+
+  // Limpiar formulario
+  const userName = form.value.name
+  form.value = {
+    role: '',
+    name: '',
+    email: '',
+    password: ''
+  }
+
+  // Resetear estado de éxito después de 3 segundos
+  setTimeout(() => {
+    submitSuccess.value = false
+  }, 3000)
 }
 </script>
 
@@ -28,7 +57,7 @@ const enviarDatos = () => {
   <b-card header="Regístrate" header-bg-variant="primary" header-text-variant="white" class="shadow-sm">
     <b-form @submit.prevent="enviarDatos">
 
-      <b-form-group label="Rol:" label-for="input-role" class="mb-3">
+      <b-form-group v-if="authStore.role === 'admin'" label="Rol:" label-for="input-role" class="mb-3">
         <b-form-select id="input-role" v-model="form.role" :options="roleOptions" required></b-form-select>
       </b-form-group>
 
@@ -54,8 +83,19 @@ const enviarDatos = () => {
         </b-input-group>
       </b-form-group>
 
-      <b-button type="submit" variant="primary" class="w-100 mt-3">
-        Registro
+
+      <b-button type="submit" :variant="submitSuccess ? 'success' : 'primary'" :disabled="isSubmitting"
+        class="w-100 mt-3">
+        <span v-if="isSubmitting">
+          <b-spinner small class="me-1"></b-spinner>
+          Registrando...
+        </span>
+        <span v-else-if="submitSuccess">
+           ¡Usuario registrado!
+        </span>
+        <span v-else>
+          Registro
+        </span>
       </b-button>
     </b-form>
   </b-card>

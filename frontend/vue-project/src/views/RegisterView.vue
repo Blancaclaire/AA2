@@ -1,18 +1,27 @@
 <script setup lang="ts">
 import RegisterFormComponent from '@/components/publicLayout/RegisterFormComponent.vue'
+import router from '@/router'
 import { useAuthStore } from '@/stores/AuthStore'
-import { RouterLink } from 'vue-router'
+
 
 const authStore = useAuthStore()
-const handleRegisterAction = (data: any) => {
-  authStore.register(data)
+const handleRegisterAction = async (data: any) => {
+
+  const success = await authStore.register(data)
+  if (success) {
+    if (authStore.role === 'admin' || authStore.role === 'instructor') {
+      await router.push('/admin/dashboard')
+    } else {
+      await router.push('/')
+    }
+  }
 }
 </script>
 
 <template>
   <b-container fluid class="p-0 overflow-hidden">
     <b-row class="g-0 vh-100">
-      
+
       <b-col md="6" class="d-none d-md-flex info-section flex-column justify-content-center p-5 text-white">
         <div class="px-lg-5">
           <h1 class="display-3 fw-bold mb-4">CursosApp</h1>
@@ -40,11 +49,12 @@ const handleRegisterAction = (data: any) => {
           <b-alert v-if="authStore.error" variant="danger" show dismissible class="mb-4">
             {{ authStore.error }}
           </b-alert>
-          
-          <register-form-component @submit-register="handleRegisterAction" :disabled="authStore.loading"></register-form-component>
+
+          <register-form-component @submit-register="handleRegisterAction"
+            :disabled="authStore.loading"></register-form-component>
 
           <p class="handleRegister">¿Ya tienes una cuenta? <router-link to="/login">Inicia sesión</router-link></p>
-          
+
           <p class="mt-5 text-center text-muted small">
             &copy; 2024 CursosApp S.L. Todos los derechos reservados.
           </p>

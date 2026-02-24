@@ -32,7 +32,7 @@ const progressVariant = (percent: number) => {
           <span class="small fw-bold" :class="`text-${progressVariant(course.progressPercent)}`">{{ course.progressPercent }}%</span>
         </div>
         <BProgress :value="course.progressPercent" :variant="progressVariant(course.progressPercent)" height="6px" class="mb-4" animated />
-        <BButton variant="primary" class="w-100 fw-bold" pill @click="router.push(`/detail/${course.courseId}`)">Continuar →</BButton>
+        <BButton variant="primary" class="w-100 fw-bold" pill @click="router.push(`/detail/${course.courseId}`)">Continuar</BButton>
       </div>
     </BCardBody>
   </BCard>
@@ -54,7 +54,7 @@ const progressVariant = (percent: number) => {
           <span class="small fw-bold text-success">100%</span>
         </div>
         <BProgress :value="100" variant="success" height="6px" class="mb-4" />
-        <BButton variant="outline-success" class="w-100 fw-bold" pill @click="router.push(`/detail/${course.courseId}`)">Ver curso →</BButton>
+        <BButton variant="outline-success" class="w-100 fw-bold" pill @click="router.push(`/detail/${course.courseId}`)">Ver curso</BButton>
       </div>
       
     </BCardBody>

@@ -20,7 +20,7 @@ const router = createRouter({
     {
       path: '/myCourses',
       name: 'myCourses',
-      meta: { layout: 'public', requiresAuth: true},
+      meta: { layout: 'public', requiresAuth: true },
       component: () => import('../views/MyCoursesView.vue'),
     },
 
@@ -42,25 +42,25 @@ const router = createRouter({
     {
       path: '/admin/dashboard',
       name: 'admin-dashboard',
-      meta: { layout: 'admin', requiresAuth: true },
+      meta: { layout: 'admin', requiresAuth: true, requiresAdmin: true  },
       component: () => import('../views/Admin/DashboardView.vue'),
     },
     {
       path: '/admin/courses',
       name: 'admin-courses',
-      meta: { layout: 'admin', requiresAuth: true },
+      meta: { layout: 'admin', requiresAuth: true, requiresAdmin: true  },
       component: () => import('../views/Admin/CoursesView.vue'),
     },
     {
       path: '/admin/categories',
       name: 'admin-categories',
-      meta: { layout: 'admin', requiresAuth: true },
+      meta: { layout: 'admin', requiresAuth: true, requiresAdmin: true  },
       component: () => import('../views/Admin/CategoriesView.vue'),
     },
     {
       path: '/admin/users',
       name: 'admin-users',
-      meta: { layout: 'admin', requiresAuth: true },
+      meta: { layout: 'admin', requiresAuth: true, requiresAdmin: true  },
       component: () => import('../views/Admin/UsersView.vue'),
     },
   ],
@@ -72,6 +72,8 @@ router.beforeEach((to, from, next) => {
 
   if (to.meta.requiresAuth && !auth.isAuthenticated) {
     next({ name: 'login' })
+  } else if (to.meta.requiresAdmin && auth.role !== 'admin' && auth.role !== 'instructor') {
+    next({ name: 'home' })  
   } else {
     next()
   }
