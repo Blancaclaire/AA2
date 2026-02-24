@@ -39,6 +39,7 @@ declare module 'vue' {
     CourseCard: typeof import('./src/components/publicLayout/home/CourseCard.vue')['default']
     CourseHeroComponent: typeof import('./src/components/publicLayout/detail/CourseHeroComponent.vue')['default']
     CoursesFilter: typeof import('./src/components/publicLayout/home/CoursesFilter.vue')['default']
+    EmptyState: typeof import('./src/components/publicLayout/myCourses/EmptyState.vue')['default']
     EnrollComponent: typeof import('./src/components/publicLayout/detail/EnrollComponent.vue')['default']
     FooterComponent: typeof import('./src/components/publicLayout/FooterComponent.vue')['default']
     ListCoursesComponent: typeof import('./src/components/publicLayout/home/ListCoursesComponent.vue')['default']
