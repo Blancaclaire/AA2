@@ -1,11 +1,24 @@
 <script setup lang="ts">
 import RegisterFormComponent from '@/components/publicLayout/RegisterFormComponent.vue';
+import router from '@/router';
 import { useAuthStore } from '@/stores/AuthStore'
+import { useUserStore } from '@/stores/UserStore'
 
+const userStore = useUserStore()
 const authStore = useAuthStore()
-const handleRegisterAction = (data: any) => {
-  authStore.register(data)
+
+const handleRegisterAction = async (data: any) => {
+  if (authStore.role === 'admin') {
+    await userStore.postUser(data)
+  } else {
+    const success = await authStore.register(data)
+    if (success) {
+      await router.push('/')
+    }
+  }
 }
+
+
 </script>
 
 <template>

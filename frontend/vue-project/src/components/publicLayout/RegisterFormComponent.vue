@@ -27,8 +27,10 @@ const enviarDatos = async () => {
 
   const dataToSubmit = {
     ...form.value,
-    role: authStore.role === 'admin' ? form.value.role : 'estudiante'
+    role: authStore.role === 'admin' ? form.value.role : 'student'
   }
+
+  console.log('Datos a enviar:', dataToSubmit)
 
   emit('submit-register', dataToSubmit)
 
