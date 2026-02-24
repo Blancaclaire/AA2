@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import MyCourseList from '@/components/publicLayout/myCourses/MyCoursesList.vue';
 import { useUserStore } from '@/stores/UserStore';
-import { onMounted, reactive } from 'vue';
+import { onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
-const userStore = useUserStore();
+const route = useRoute()
+const userStore = useUserStore()
 
-onMounted(()=> {
-    userStore.getUserCourses()
-})
+const loadCourses = () => {
+  userStore.getUserCourses()
+}
+
+onMounted(loadCourses)
+watch(() => route.fullPath, loadCourses)
 
 </script>
 

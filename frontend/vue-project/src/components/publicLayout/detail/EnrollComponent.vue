@@ -9,8 +9,11 @@ const props = defineProps<{ courseId: number }>()
 const courseStore = useCourseStore()
 const authStore = useAuthStore()
 
-const handleEnroll = () => {
-  courseStore.enrollUser(props.courseId)
+const handleEnroll = async () => {
+  await courseStore.enrollUser(props.courseId)
+  if (!courseStore.error) {
+    router.push('/myCourses')
+  }
 }
 
 const handleToHome = ()=>{
