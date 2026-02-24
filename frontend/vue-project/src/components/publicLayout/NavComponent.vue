@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { useAuthStore  } from '@/stores/AuthStore';
-import router from '@/router';
+import { useRouter } from 'vue-router'  
 
-
+const router = useRouter()
 
 const route = useRoute()
 const authStore = useAuthStore();
 
-const handleLogout = ()=>{
+const handleLogout = () => {
   authStore.logout()
-  router.push('/login')
+  window.location.href = '/'
 }
 
 </script>
@@ -33,7 +33,7 @@ const handleLogout = ()=>{
 
         <!-- Con login -->
         <template v-else>
-          <BNavItem to="/my-courses" :active="route.path === '/my-courses'">Mis Cursos</BNavItem>
+          <BNavItem to="/myCourses" :active="route.path === '/myCourses'">Mis Cursos</BNavItem>
           <BNavItem 
             v-if="authStore.role === 'admin' || authStore.role === 'instructor'" 
             to="/admin/dashboard"

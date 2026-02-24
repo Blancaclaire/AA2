@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useCourseStore } from '@/stores/CoursesStore'
-import CourseFilters from '@/components/CoursesFilter.vue'
-import ListCoursesComponent from '@/components/ListCoursesComponent.vue'
+import CourseFilters from '@/components/publicLayout/home/CoursesFilter.vue'
+import ListCoursesComponent from '@/components/publicLayout/home/ListCoursesComponent.vue'
 
 const courseStore = useCourseStore()
 

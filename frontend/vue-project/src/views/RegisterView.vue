@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import RegisterFormComponent from '@/components/RegisterFormComponent.vue'
+import RegisterFormComponent from '@/components/publicLayout/RegisterFormComponent.vue'
 import { useAuthStore } from '@/stores/AuthStore'
 import { RouterLink } from 'vue-router'
 

@@ -11,12 +11,17 @@ const router = createRouter({
       meta: { layout: 'public' },
       component: () => import('../views/HomeView.vue'),
     },
-
     {
       path: '/detail/:id',
       name: 'detail',
       meta: { layout: 'public' },
       component: () => import('../views/CourseDetailView.vue'),
+    },
+    {
+      path: '/myCourses',
+      name: 'myCourses',
+      meta: { layout: 'public', requiresAuth: true},
+      component: () => import('../views/MyCoursesView.vue'),
     },
 
     // --- Blank ---
@@ -33,6 +38,7 @@ const router = createRouter({
       component: () => import('../views/RegisterView.vue'),
     },
 
+    // --- Admin ---
     {
       path: '/admin/dashboard',
       name: 'admin-dashboard',

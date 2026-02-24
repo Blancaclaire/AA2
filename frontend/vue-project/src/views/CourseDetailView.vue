@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import CourseHeroComponent from '@/components/CourseHeroComponent.vue'
-import EnrollComponent from '@/components/EnrollComponent.vue'
+import CourseHeroComponent from '@/components/publicLayout/detail/CourseHeroComponent.vue'
+import EnrollComponent from '@/components/publicLayout/detail/EnrollComponent.vue'
 import { useCourseStore } from '@/stores/CoursesStore'
 import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'

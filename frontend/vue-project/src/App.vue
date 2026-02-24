@@ -4,7 +4,7 @@ import { useUIStore } from '@/stores/UIStore'
 import NavComponent from '@/components/publicLayout/NavComponent.vue'
 import FooterComponent from '@/components/publicLayout/FooterComponent.vue'
 import AdminHeader from '@/components/adminLayout/AdminHeader.vue'
-import AdminFooter from '@/components/AdminFooter.vue'
+import AdminFooter from '@/components/adminLayout/AdminFooter.vue'
 
 const route = useRoute()
 const uiStore = useUIStore()

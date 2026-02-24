@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import LoginFormComponent from '@/components/LoginFormComponent.vue'
+import LoginFormComponent from '@/components/publicLayout/LoginFormComponent.vue'
 import router from '@/router'
 import { useAuthStore } from '@/stores/AuthStore'
 import { RouterLink } from 'vue-router'

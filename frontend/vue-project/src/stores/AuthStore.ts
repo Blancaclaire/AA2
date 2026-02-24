@@ -1,5 +1,8 @@
 import { defineStore } from 'pinia'
 import api from '@/api/axios'
+import router from '@/router'
+
+
 
 export const useAuthStore = defineStore('AuthStore', {
   state: () => ({
@@ -13,7 +16,7 @@ export const useAuthStore = defineStore('AuthStore', {
     isAuthenticated: (state) => !!state.token,
   },
   actions: {
-    
+
     async login(credentials: any) {
       this.loading = true
       this.error = null
@@ -54,8 +57,8 @@ export const useAuthStore = defineStore('AuthStore', {
       this.userName = null
       localStorage.removeItem('token')
       localStorage.removeItem('role')
-      localStorage.removeItem('userName')},
+      localStorage.removeItem('userName')
 
-
-  }
+    }
+  },
 })
