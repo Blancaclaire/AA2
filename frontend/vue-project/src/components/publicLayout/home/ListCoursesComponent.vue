@@ -9,5 +9,5 @@ defineProps<{ courses: any[] }>()
     <b-col v-for="course in courses" :key="course.id" md="6" lg="4">
       <CourseCard :course="course" />
     </b-col>
-  </b-row>
+  </b-row> 
 </template>

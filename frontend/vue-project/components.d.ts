@@ -43,6 +43,7 @@ declare module 'vue' {
     EnrollComponent: typeof import('./src/components/publicLayout/detail/EnrollComponent.vue')['default']
     FooterComponent: typeof import('./src/components/publicLayout/FooterComponent.vue')['default']
     ListCoursesComponent: typeof import('./src/components/publicLayout/home/ListCoursesComponent.vue')['default']
+    ListUsersComponent: typeof import('./src/components/adminLayout/users/ListUsersComponent.vue')['default']
     LoginFormComponent: typeof import('./src/components/publicLayout/LoginFormComponent.vue')['default']
     MyCourseCard: typeof import('./src/components/publicLayout/myCourses/MyCourseCard.vue')['default']
     MyCourseList: typeof import('./src/components/publicLayout/myCourses/MyCourseList.vue')['default']
@@ -51,6 +52,7 @@ declare module 'vue' {
     RegisterFormComponent: typeof import('./src/components/publicLayout/RegisterFormComponent.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    UserCardComponent: typeof import('./src/components/adminLayout/users/UserCardComponent.vue')['default']
   }
   export interface GlobalDirectives {
     vBColorMode: typeof import('bootstrap-vue-next/directives/BColorMode')['vBColorMode']
