@@ -18,6 +18,8 @@ const onFilter = (params: any) => {
 </script>
 
 <template>
+    <div class="container py-4 mb-5"> 
     <CourseFilters @filter="onFilter" />
     <ListCoursesComponent :courses="courseStore.courses" />
+    </div>
 </template>

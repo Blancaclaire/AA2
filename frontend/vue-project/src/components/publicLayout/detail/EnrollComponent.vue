@@ -9,8 +9,11 @@ const props = defineProps<{ courseId: number }>()
 const courseStore = useCourseStore()
 const authStore = useAuthStore()
 
-const handleEnroll = () => {
-  courseStore.enrollUser(props.courseId)
+const handleEnroll = async () => {
+  await courseStore.enrollUser(props.courseId)
+  if (!courseStore.error) {
+    router.push('/myCourses')
+  }
 }
 
 const handleToHome = ()=>{
@@ -118,7 +121,7 @@ const handleToHome = ()=>{
 
 <style scoped>
 .enroll-card {
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--bs-border-color);
   border-radius: 16px;
   position: sticky;
   top: 1.5rem;
@@ -127,7 +130,7 @@ const handleToHome = ()=>{
 .enroll-price {
   font-size: 2.4rem;
   font-weight: 800;
-  color: #2222c4;
+  color: var(--bs-primary);
   letter-spacing: -1px;
 }
 </style>
