@@ -2,11 +2,11 @@
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/AuthStore';
 import { useRouter } from 'vue-router'
-import { useTheme } from '@/composables/useTheme'
+import { useThemeStore } from '@/stores/ThemeStore'
 
+const themeStore = useThemeStore()
 const route = useRoute()
 const authStore = useAuthStore();
-const { theme, toggleTheme } = useTheme()
 const router = useRouter()
 
 
@@ -38,8 +38,8 @@ const handleLogout = () => {
           <BNavItem to="/myCourses" :active="route.path === '/myCourses'">Mis Cursos</BNavItem>
           <BNavItem v-if="authStore.role === 'admin' || authStore.role === 'instructor'" to="/admin/dashboard">Admin
           </BNavItem>
-          <BNavItem @click="toggleTheme">
-            {{ theme === 'light' ? 'Modo Oscuro' : 'Modo Claro' }}
+          <BNavItem @click="themeStore.toggleTheme">
+            {{ themeStore.theme === 'light' ? 'Modo Oscuro' : 'Modo Claro' }}
           </BNavItem>
           <BNavItem @click="handleLogout">Cerrar Sesión</BNavItem>
         </template>
