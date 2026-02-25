@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 const props = defineProps<{ user: any }>()
-const emit = defineEmits(['delete-user'])
+const emit = defineEmits(['delete-user', 'update-user'])
 
 const getRoleBadgeVariant = (role: string) => {
   switch (role) {
@@ -85,7 +85,7 @@ const formatDate = (date: string | null) => {
 
       <!-- Action Buttons -->
       <div class="mt-auto d-flex gap-2">
-        <b-button variant="outline-primary" size="sm" class="flex-grow-1" disabled>
+        <b-button variant="outline-primary" size="sm" class="flex-grow-1" @click="emit('update-user', user)">
           Editar
         </b-button>
         <b-button variant="outline-danger" size="sm" class="flex-grow-1" @click="emit('delete-user', user.id)">

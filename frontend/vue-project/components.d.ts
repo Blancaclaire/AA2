@@ -52,6 +52,7 @@ declare module 'vue' {
     RegisterFormComponent: typeof import('./src/components/publicLayout/RegisterFormComponent.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    UpdateUserModal: typeof import('./src/components/adminLayout/users/UpdateUserModal.vue')['default']
     UserCardComponent: typeof import('./src/components/adminLayout/users/UserCardComponent.vue')['default']
   }
   export interface GlobalDirectives {

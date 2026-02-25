@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import ListUsersComponent from '@/components/adminLayout/users/ListUsersComponent.vue'
 import RegisterFormComponent from '@/components/publicLayout/RegisterFormComponent.vue'
+import UpdateUserModal from '@/components/adminLayout/users/UpdateUserModal.vue'
 import { useAuthStore } from '@/stores/AuthStore'
 import { useUserStore } from '@/stores/UserStore'
 
@@ -9,6 +10,8 @@ const userStore = useUserStore()
 const authStore = useAuthStore()
 
 const pendingDeleteId = ref<number | null>(null)
+const showEditModal = ref(false)
+const editingUser = ref<any | null>(null)
 
 onMounted(() => {
   userStore.getUsers()
@@ -36,6 +39,22 @@ const confirmDelete = async () => {
 const cancelDelete = () => {
   pendingDeleteId.value = null
 }
+
+const handleEditUser = (user: any) => {
+  editingUser.value = user
+  showEditModal.value = true
+}
+
+const handleSaveUser = async (payload: { id: number; role: string }) => {
+  const success = await userStore.updateUser(payload.id, {
+    role: payload.role,
+  })
+  if (success) await userStore.getUsers()
+  showEditModal.value = false
+  editingUser.value = null
+}
+
+
 </script>
 
 <template>
@@ -70,8 +89,16 @@ const cancelDelete = () => {
         <!-- Aquí irá el componente de filtros -->
         <!-- <UserFiltersComponent /> -->
 
-        <ListUsersComponent :users="userStore.users" @delete-user="handleDeleteUser" />
+        <ListUsersComponent :users="userStore.users" @delete-user="handleDeleteUser" @update-user="handleEditUser"
+         />
       </b-col>
     </b-row>
+
+    <UpdateUserModal
+      :show="showEditModal"
+      :user="editingUser"
+      @close="showEditModal = false"
+      @save="handleSaveUser"
+    />
   </div>
 </template>

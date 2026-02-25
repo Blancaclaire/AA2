@@ -55,12 +55,26 @@ export const useUserStore = defineStore('UserStore', {
                 console.log(`'Usuario ${res.data} eliminado exitosamente`)
                 return true
             } catch (err: any) {
-                this.error = err.response?.data?.message || 'Error al cargar los usuarios'
+                this.error = err.response?.data?.message || 'Error al borrar el usuarios'
                 return false
             } finally {
                 this.loading = false
             }
-        },        
+        },
+
+        async updateUser(id: number, body : any) {
+            this.loading = true
+            try {
+                const res = await api.patch(`/users/${id}`, body)
+                console.log(`'Usuario ${res.data} actualizado`)
+                return true
+            } catch (err: any) {
+                this.error = err.response?.data?.message || 'Error al actualizar el usuarios'
+                return false
+            } finally {
+                this.loading = false
+            }
+        },
 
     },
 }
