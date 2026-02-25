@@ -59,20 +59,34 @@ export const useCourseStore = defineStore('CoursesStore', {
       }
     },
 
-    async postCourse(body : any){
+    async postCourse(body: any) {
       this.loading = true
       this.error = null
-      try{
+      try {
         const res = await api.post(`/courses`, body)
         this.course = res.data
         return true
-      }catch (err: any) {
+      } catch (err: any) {
         this.error = err.response?.data?.message || 'Error al crear curso'
         return false
       } finally {
         this.loading = false
       }
-    }
+    },
+
+    async deleteCourse(id: number) {
+      this.loading = true
+      try {
+        const res = await api.delete(`/courses/${id}`)
+        console.log(`'Curso ${res.data} eliminado exitosamente`)
+        return true
+      } catch (err: any) {
+        this.error = err.response?.data?.message || 'Error al borrar el curso'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
 
 
   }

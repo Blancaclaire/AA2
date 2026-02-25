@@ -82,8 +82,6 @@ const onFilter = (params: { search: string; role: string }) => {
   search.value = params.search
   roleFilter.value = params.role
 }
-
-
 </script>
 
 <template>
@@ -96,17 +94,7 @@ const onFilter = (params: { search: string; role: string }) => {
       </div>
     </div>
 
-    <!-- Alerta de eliminación -->
-    <div v-if="pendingDeleteId" class="alert alert-danger d-flex align-items-center justify-content-between mb-4">
-      <span>¿Estás seguro de que quieres eliminar este usuario?</span>
-      <div class="d-flex gap-2">
-        <b-button variant="danger" size="sm" @click="confirmDelete">Sí, eliminar</b-button>
-        <b-button variant="outline-secondary" size="sm" @click="cancelDelete">Cancelar</b-button>
-      </div>
-    </div>
-
     <b-row>
-
       <b-col lg="4" class="mb-4">
         <div class="position-sticky" style="top: 1rem;">
           <RegisterFormComponent @submit-register="handleRegisterAction" />
@@ -115,8 +103,11 @@ const onFilter = (params: { search: string; role: string }) => {
 
       <b-col lg="8">
         <UserFiltersComponent @filter="onFilter" />
-        <ListUsersComponent :users="filteredUsers" @delete-user="handleDeleteUser" @update-user="handleEditUser"
-         />
+        <ListUsersComponent 
+          :users="filteredUsers" 
+          @delete-user="handleDeleteUser" 
+          @update-user="handleEditUser"
+        />
       </b-col>
     </b-row>
 
@@ -126,5 +117,29 @@ const onFilter = (params: { search: string; role: string }) => {
       @close="showEditModal = false"
       @save="handleSaveUser"
     />
+
+    <b-modal 
+      :model-value="pendingDeleteId !== null"
+      title="Confirmar eliminación"
+      centered
+      @hidden="cancelDelete"
+    >
+      <div class="text-center py-3">
+        <div class="mb-3">
+          <b-icon icon="exclamation-triangle-fill" font-scale="3" variant="danger"></b-icon>
+        </div>
+        <p class="mb-0 fs-5">¿Estás seguro de que quieres eliminar este usuario?</p>
+        <p class="text-muted small mt-2">Esta acción no se puede deshacer</p>
+      </div>
+
+      <template #footer>
+        <b-button variant="secondary" @click="cancelDelete">
+          Cancelar
+        </b-button>
+        <b-button variant="danger" @click="confirmDelete">
+          Sí, eliminar
+        </b-button>
+      </template>
+    </b-modal>
   </div>
 </template>

@@ -69,7 +69,7 @@ export const useUserStore = defineStore('UserStore', {
                 console.log(`'Usuario ${res.data} actualizado`)
                 return true
             } catch (err: any) {
-                this.error = err.response?.data?.message || 'Error al actualizar el usuarios'
+                this.error = err.response?.data?.message || 'Error al actualizar el usuario'
                 return false
             } finally {
                 this.loading = false
