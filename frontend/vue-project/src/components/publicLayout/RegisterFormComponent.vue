@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useAuthStore } from '@/stores/AuthStore'
+import { useForm } from 'vee-validate'
+import * as yup from 'yup'
 
 const authStore = useAuthStore()
 const emit = defineEmits(['submit-register'])
@@ -8,11 +10,12 @@ const showPassword = ref(false)
 const isSubmitting = ref(false)
 const submitSuccess = ref(false)
 
-const form = ref({
-  role: '',
-  name: '',
-  email: '',
-  password: ''
+// ✅ Controlar qué campos han sido tocados
+const touchedFields = ref({
+  role: false,
+  name: false,
+  email: false,
+  password: false
 })
 
 const roleOptions = ref([
@@ -21,13 +24,66 @@ const roleOptions = ref([
   { value: 'instructor', text: 'Instructor' }
 ])
 
-const enviarDatos = async () => {
+const validationSchema = yup.object({
+  role: authStore.role === 'admin' 
+    ? yup.string().required('El rol es obligatorio')
+    : yup.string(),
+  name: yup.string()
+    .required('El nombre es obligatorio')
+    .min(3, 'El nombre debe tener al menos 3 caracteres')
+    .max(50, 'El nombre no puede exceder 50 caracteres'),
+  email: yup.string()
+    .required('El email es obligatorio')
+    .email('Debe ser un email válido'),
+  password: yup.string()
+    .required('La contraseña es obligatoria')
+    .min(6, 'La contraseña debe tener al menos 6 caracteres')
+})
+
+const { handleSubmit, errors, resetForm, defineField } = useForm({
+  validationSchema,
+  initialValues: {
+    role: '',
+    name: '',
+    email: '',
+    password: ''
+  }
+})
+
+const [role] = defineField('role')
+const [name] = defineField('name')
+const [email] = defineField('email')
+const [password] = defineField('password')
+
+// ✅ Funciones para marcar campos como tocados
+const markAsTouched = (field: keyof typeof touchedFields.value) => {
+  touchedFields.value[field] = true
+}
+
+// ✅ Helper para determinar el estado del campo
+const getFieldState = (field: keyof typeof touchedFields.value) => {
+  // Solo mostrar error si el campo ha sido tocado Y tiene error
+  if (touchedFields.value[field] && errors.value[field]) {
+    return false // Rojo
+  }
+  return null // Sin estado (normal)
+}
+
+const enviarDatos = handleSubmit(async (values) => {
+  // Marcar todos los campos como tocados al intentar enviar
+  touchedFields.value = {
+    role: true,
+    name: true,
+    email: true,
+    password: true
+  }
+
   isSubmitting.value = true
   submitSuccess.value = false
 
   const dataToSubmit = {
-    ...form.value,
-    role: authStore.role === 'admin' ? form.value.role : 'student'
+    ...values,
+    role: authStore.role === 'admin' ? values.role : 'student'
   }
 
   console.log('Datos a enviar:', dataToSubmit)
@@ -39,43 +95,99 @@ const enviarDatos = async () => {
   isSubmitting.value = false
   submitSuccess.value = true
 
-  // Limpiar formulario
-  const userName = form.value.name
-  form.value = {
-    role: '',
-    name: '',
-    email: '',
-    password: ''
+  resetForm()
+  
+  // Resetear campos tocados
+  touchedFields.value = {
+    role: false,
+    name: false,
+    email: false,
+    password: false
   }
 
-  // Resetear estado de éxito después de 3 segundos
   setTimeout(() => {
     submitSuccess.value = false
   }, 3000)
-}
+})
 </script>
 
 <template>
   <b-card header="Regístrate" header-bg-variant="primary" header-text-variant="white" class="shadow-sm">
     <b-form @submit.prevent="enviarDatos">
 
-      <b-form-group v-if="authStore.role === 'admin'" label="Rol:" label-for="input-role" class="mb-3">
-        <b-form-select id="input-role" v-model="form.role" :options="roleOptions" required></b-form-select>
+      <!-- Rol (solo admin) -->
+      <b-form-group 
+        v-if="authStore.role === 'admin'" 
+        label="Rol:" 
+        label-for="input-role" 
+        class="mb-3"
+        :invalid-feedback="errors.role"
+        :state="getFieldState('role')"
+      >
+        <b-form-select 
+          id="input-role" 
+          v-model="role" 
+          :options="roleOptions"
+          :state="getFieldState('role')"
+          @blur="markAsTouched('role')"
+        ></b-form-select>
       </b-form-group>
 
-      <b-form-group label="Nombre:" label-for="input-name" class="mb-3">
-        <b-form-input id="input-name" v-model="form.name" type="text" placeholder="Clara" required></b-form-input>
+      <!-- Nombre -->
+      <b-form-group 
+        label="Nombre:" 
+        label-for="input-name" 
+        class="mb-3"
+        :invalid-feedback="errors.name"
+        :state="getFieldState('name')"
+      >
+        <b-form-input 
+          id="input-name" 
+          v-model="name" 
+          type="text" 
+          placeholder="Clara"
+          :state="getFieldState('name')"
+          @blur="markAsTouched('name')"
+        ></b-form-input>
       </b-form-group>
 
-      <b-form-group label="Correo Electrónico:" label-for="input-email" class="mb-3">
-        <b-form-input id="input-email" v-model="form.email" type="email" placeholder="ejemplo@correo.com" required
-          autocomplete="email"></b-form-input>
+      <!-- Email -->
+      <b-form-group 
+        label="Correo Electrónico:" 
+        label-for="input-email" 
+        class="mb-3"
+        :invalid-feedback="errors.email"
+        :state="getFieldState('email')"
+      >
+        <b-form-input 
+          id="input-email" 
+          v-model="email" 
+          type="email" 
+          placeholder="ejemplo@correo.com"
+          autocomplete="email"
+          :state="getFieldState('email')"
+          @blur="markAsTouched('email')"
+        ></b-form-input>
       </b-form-group>
 
-      <b-form-group label="Contraseña:" label-for="input-password" class="mb-3">
+      <!-- Contraseña -->
+      <b-form-group 
+        label="Contraseña:" 
+        label-for="input-password" 
+        class="mb-3"
+        :invalid-feedback="errors.password"
+        :state="getFieldState('password')"
+      >
         <b-input-group>
-          <b-form-input id="input-password" v-model="form.password" :type="showPassword ? 'text' : 'password'"
-            placeholder="Ingresa tu contraseña" required autocomplete="new-password"></b-form-input>
+          <b-form-input 
+            id="input-password" 
+            v-model="password" 
+            :type="showPassword ? 'text' : 'password'"
+            placeholder="Ingresa tu contraseña"
+            autocomplete="new-password"
+            :state="getFieldState('password')"
+            @blur="markAsTouched('password')"
+          ></b-form-input>
           <b-input-group-text>
             <b-button variant="link" class="p-0 text-decoration-none" @click="showPassword = !showPassword">
               <span v-if="showPassword">Ocultar</span>
@@ -85,15 +197,18 @@ const enviarDatos = async () => {
         </b-input-group>
       </b-form-group>
 
-
-      <b-button type="submit" :variant="submitSuccess ? 'success' : 'primary'" :disabled="isSubmitting"
-        class="w-100 mt-3">
+      <b-button 
+        type="submit" 
+        :variant="submitSuccess ? 'success' : 'primary'" 
+        :disabled="isSubmitting"
+        class="w-100 mt-3"
+      >
         <span v-if="isSubmitting">
           <b-spinner small class="me-1"></b-spinner>
           Registrando...
         </span>
         <span v-else-if="submitSuccess">
-           ¡Usuario registrado!
+          ¡Usuario registrado!
         </span>
         <span v-else>
           Registro
@@ -104,7 +219,7 @@ const enviarDatos = async () => {
 </template>
 
 <style scoped>
-.shadow-sm{
-background-color: var(--bs-tertiary-bg) !important;
+.shadow-sm {
+  background-color: var(--bs-tertiary-bg) !important;
 }
 </style>
