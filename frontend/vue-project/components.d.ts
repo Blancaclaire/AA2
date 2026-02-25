@@ -54,6 +54,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     UpdateUserModal: typeof import('./src/components/adminLayout/users/UpdateUserModal.vue')['default']
     UserCardComponent: typeof import('./src/components/adminLayout/users/UserCardComponent.vue')['default']
+    UserFiltersComponent: typeof import('./src/components/adminLayout/users/UserFiltersComponent.vue')['default']
   }
   export interface GlobalDirectives {
     vBColorMode: typeof import('bootstrap-vue-next/directives/BColorMode')['vBColorMode']
