@@ -87,6 +87,21 @@ export const useCourseStore = defineStore('CoursesStore', {
         this.loading = false
       }
     },
+    async updateCourse(id: number, body: any) {
+      this.loading = true
+      this.error = null
+
+      try {
+        const res = await api.put(`/courses/${id}`, body)
+        console.log('Curso actualizado:', res.data)
+        return true
+      } catch (err: any) {
+        this.error = err.response?.data?.message || 'Error al actualizar el curso'
+        return false
+      } finally {
+        this.loading = false
+      }
+    }
 
 
   }

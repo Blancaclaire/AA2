@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import CourseForm from '@/components/adminLayout/courses/CourseForm.vue';
+import UpdateCourseModal from '@/components/adminLayout/courses/UpdateCourseModal.vue';
 import { useCourseStore } from '@/stores/CoursesStore';
 import { useAuthStore } from '@/stores/AuthStore'
 import CourseFilters from '@/components/publicLayout/home/CoursesFilter.vue'
@@ -20,7 +21,7 @@ const onFilter = (params: any) => {
 //Borrar cursos
 const pendingDeleteId = ref<number | null>(null)
 
-const handleDeleteUser = (id: number) => {
+const handleDeleteCourse = (id: number) => {
   pendingDeleteId.value = id
 }
 
@@ -35,6 +36,22 @@ const confirmDelete = async () => {
 const cancelDelete = () => {
   pendingDeleteId.value = null
 }
+
+const showEditModal = ref(false)
+const editingCourse = ref<any | null>(null)
+
+const handleEditCourse = (course: any) => {
+  editingCourse.value = course
+  showEditModal.value = true
+}
+
+const handleSaveCourse = async (payload: any) => {
+  const success = await courseStore.updateCourse(editingCourse.value.id, payload)
+  
+  if (success) await courseStore.getCourses()
+  showEditModal.value = false
+  editingCourse.value = null
+}
 </script>
 
 <template>
@@ -48,21 +65,33 @@ const cancelDelete = () => {
     </div>
 
     <b-row>
+      <!-- Formulario de creación (columna izquierda) -->
       <b-col lg="4" class="mb-4">
         <div class="position-sticky" style="top: 1rem;">
           <CourseForm />
         </div>
       </b-col>
 
+      <!-- Lista de cursos (columna derecha) -->
       <b-col lg="8">
         <CourseFilters @filter="onFilter" />
         <ListCoursesComponent 
           :courses="courseStore.courses" 
-          @delete-course="handleDeleteUser"
+          @delete-course="handleDeleteCourse"
+          @update-course="handleEditCourse"
         />
       </b-col>
     </b-row>
 
+    <!-- ✅ Modal de edición de curso -->
+    <UpdateCourseModal
+      :show="showEditModal"
+      :course="editingCourse"
+      @close="showEditModal = false"
+      @save="handleSaveCourse"
+    />
+
+    <!-- Modal de confirmación de eliminación -->
     <b-modal 
       :model-value="pendingDeleteId !== null"
       title="Confirmar eliminación"
@@ -76,7 +105,6 @@ const cancelDelete = () => {
         <p class="mb-0 fs-5">¿Estás seguro de que quieres eliminar este curso?</p>
         <p class="text-muted small mt-2">Esta acción no se puede deshacer</p>
       </div>
-
       <template #footer>
         <b-button variant="secondary" @click="cancelDelete">
           Cancelar
