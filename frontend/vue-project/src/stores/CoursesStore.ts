@@ -57,6 +57,21 @@ export const useCourseStore = defineStore('CoursesStore', {
       } finally {
         this.loading = false
       }
+    },
+
+    async postCourse(body : any){
+      this.loading = true
+      this.error = null
+      try{
+        const res = await api.post(`/courses`, body)
+        this.course = res.data
+        return true
+      }catch (err: any) {
+        this.error = err.response?.data?.message || 'Error al crear curso'
+        return false
+      } finally {
+        this.loading = false
+      }
     }
 
 

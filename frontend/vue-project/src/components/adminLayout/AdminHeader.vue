@@ -24,7 +24,6 @@ const handleLogout = () => {
       <BNavbarNav>
         <BNavItem to="/admin/dashboard" :active="route.path === '/admin/dashboard'">Dashboard</BNavItem>
         <BNavItem to="/admin/courses" :active="route.path === '/admin/courses'">Cursos</BNavItem>
-        <BNavItem to="/admin/categories" :active="route.path === '/admin/categories'">Categorías</BNavItem>
         <BNavItem to="/admin/users" :active="route.path === '/admin/users'">Usuarios</BNavItem>
       </BNavbarNav>
 

@@ -37,7 +37,7 @@ public class CourseSearchParams
     public decimal? MaxPrice { get; set; }
     public DateTime? DateFrom { get; set; }
     public DateTime? DateTo { get; set; }
-    public bool? IsPublished { get; set; }
+    public bool IsPublished { get; set; } = true;
     public string SortBy { get; set; } = "createdAt";
     public string SortOrder { get; set; } = "desc";
     public int Page { get; set; } = 1;

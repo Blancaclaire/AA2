@@ -71,7 +71,9 @@ const filteredUsers = computed(() => {
     const matchesSearch = !search.value ||
       u.name.toLowerCase().includes(search.value.toLowerCase()) ||
       u.email.toLowerCase().includes(search.value.toLowerCase())
+
     const matchesRole = !roleFilter.value || u.role === roleFilter.value
+    
     return matchesSearch && matchesRole
   })
 })

@@ -37,6 +37,7 @@ declare module 'vue' {
     BRow: typeof import('bootstrap-vue-next/components/BContainer')['BRow']
     BSpinner: typeof import('bootstrap-vue-next/components/BSpinner')['BSpinner']
     CourseCard: typeof import('./src/components/publicLayout/home/CourseCard.vue')['default']
+    CourseForm: typeof import('./src/components/adminLayout/courses/CourseForm.vue')['default']
     CourseHeroComponent: typeof import('./src/components/publicLayout/detail/CourseHeroComponent.vue')['default']
     CoursesFilter: typeof import('./src/components/publicLayout/home/CoursesFilter.vue')['default']
     EmptyState: typeof import('./src/components/publicLayout/myCourses/EmptyState.vue')['default']
