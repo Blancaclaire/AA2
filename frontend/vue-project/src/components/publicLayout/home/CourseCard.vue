@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/AuthStore'
 
-
+const authStore = useAuthStore()
 const props = defineProps<{ course: any }>()
-
+const emit = defineEmits(['delete-course', 'update-course'])
 const router = useRouter()
 
 const levelColor = (level: string) => {
@@ -50,12 +51,20 @@ const handleCourseDetail = () => {
           <span class="small text-muted">👥 {{ course.enrollmentCount }}</span>
         </div>
 
-        <div class="d-flex justify-content-between align-items-center mt-2">
+        <div v-if="authStore.role != 'admin'" class="d-flex justify-content-between align-items-center mt-2">
           <span class="fs-4 fw-bold card-price">{{ course.price }}€</span>
           <button class="btn-detail" @click="handleCourseDetail">
             Ver detalles
           </button>
         </div>
+      </div>
+      <div v-if="authStore.role === 'admin'" class="mt-auto d-flex gap-2">
+        <b-button variant="outline-primary" size="sm" class="flex-grow-1" @click="emit('update-course', course)">
+          Editar
+        </b-button>
+        <b-button variant="outline-danger" size="sm" class="flex-grow-1" @click="emit('delete-course', course.id)">
+          Eliminar
+        </b-button>
       </div>
     </b-card-body>
   </b-card>
@@ -76,7 +85,7 @@ const handleCourseDetail = () => {
 }
 
 .card-header-colored {
-  background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(99,102,241,0.2) 100%);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(99, 102, 241, 0.2) 100%);
   border-bottom: 1px solid var(--bs-border-color);
 }
 
@@ -85,7 +94,7 @@ const handleCourseDetail = () => {
 }
 
 .btn-detail {
-  background: var(--bs-primary); 
+  background: var(--bs-primary);
   color: white;
   border: none;
   border-radius: 8px;
