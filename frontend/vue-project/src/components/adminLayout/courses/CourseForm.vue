@@ -69,8 +69,6 @@ const enviarDatos = async () => {
 
 <template>
 
-    <h1>Esto es un formulario para crear un curso</h1>
-
     <b-card header="Crear un curso" header-bg-variant="primary" header-text-variant="white" class="shadow-sm">
         <b-form @submit.prevent="enviarDatos">
 
