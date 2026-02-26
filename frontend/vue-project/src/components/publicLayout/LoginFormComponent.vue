@@ -5,7 +5,6 @@ const emit = defineEmits(['submit-login'])
 
 const showPassword = ref(false)
 
-//Datos del formulario
 const form = ref({
   email: '',
   password: ''

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/api',   // ← relativo: nginx lo reenvía a backend:8080/api
+  baseURL: '/api',   
   headers: {
     'Content-Type': 'application/json'
   }

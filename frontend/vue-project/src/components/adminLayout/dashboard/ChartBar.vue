@@ -32,7 +32,7 @@ const chartData = computed(() => ({
   ]
 }))
 
-// ✅ Convertir a computed
+
 const chartOptions = computed(() => ({
   responsive: true,
   maintainAspectRatio: false,

@@ -17,7 +17,6 @@ defineProps<{
           {{ value }}
         </h3>
         
-        <!-- Tendencia (opcional) -->
         <div v-if="trend !== undefined" class="mt-2">
           <span :class="trend >= 0 ? 'text-success' : 'text-danger'" class="small">
             <span v-if="trend >= 0">▲</span>
@@ -28,10 +27,6 @@ defineProps<{
         </div>
       </div>
       
-      <!-- Icono -->
-      <div v-if="icon" class="kpi-icon" :class="`bg-${color || 'primary'}-subtle`">
-        {{ icon }}
-      </div>
     </div>
   </b-card>
 </template>

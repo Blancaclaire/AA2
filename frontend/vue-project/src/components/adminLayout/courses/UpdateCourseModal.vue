@@ -16,7 +16,6 @@ const emit = defineEmits<{
 
 const categoryStore = useCategoryStore()
 
-// Controlar qué campos han sido tocados
 const touchedFields = ref({
   title: false,
   description: false,

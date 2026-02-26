@@ -6,7 +6,7 @@ import ListCoursesComponent from '@/components/publicLayout/home/ListCoursesComp
 
 const courseStore = useCourseStore()
 
-//Ejecuta código cuando el componente aparece por primera vez
+
 onMounted(() => {
     courseStore.getCourses()
 })

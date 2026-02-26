@@ -13,7 +13,7 @@ const courseStore = useCourseStore()
 const isSubmitting = ref(false)
 const submitSuccess = ref(false)
 
-// ✅ Controlar qué campos han sido tocados
+// Controlar qué campos han sido tocados
 const touchedFields = ref({
   title: false,
   description: false,
@@ -36,7 +36,7 @@ const levelOptions = [
     { value: 'Advanced', text: 'Avanzado' },
 ]
 
-// ✅ Esquema de validación con Yup
+// Validación con Yup
 const validationSchema = yup.object({
   title: yup.string()
     .required('El título es obligatorio')
@@ -65,7 +65,7 @@ const validationSchema = yup.object({
     .typeError('Debe seleccionar una categoría')
 })
 
-// ✅ Configurar VeeValidate
+//  VeeValidate
 const { handleSubmit, errors, resetForm, defineField } = useForm({
   validationSchema,
   initialValues: {
@@ -79,7 +79,7 @@ const { handleSubmit, errors, resetForm, defineField } = useForm({
   }
 })
 
-// ✅ Usar defineField para compatibilidad con v-model
+// compatibilidad con v-model
 const [title] = defineField('title')
 const [description] = defineField('description')
 const [instructor] = defineField('instructor')
@@ -88,22 +88,21 @@ const [durationHours] = defineField('durationHours')
 const [level] = defineField('level')
 const [categoryId] = defineField('categoryId')
 
-// ✅ Funciones para marcar campos como tocados
+// Marcar campos como tocados
 const markAsTouched = (field: keyof typeof touchedFields.value) => {
   touchedFields.value[field] = true
 }
 
-// ✅ Helper para determinar el estado del campo
+// Determinar el estado del campo
 const getFieldState = (field: keyof typeof touchedFields.value) => {
   if (touchedFields.value[field] && errors.value[field]) {
     return false // Rojo
   }
-  return null // Sin estado (normal)
+  return null // Sin estado 
 }
 
-// ✅ Mantener tu lógica exacta
 const enviarDatos = handleSubmit(async (values) => {
-    // Marcar todos los campos como tocados al intentar enviar
+
     touchedFields.value = {
       title: true,
       description: true,
@@ -137,7 +136,7 @@ const enviarDatos = handleSubmit(async (values) => {
         await courseStore.getCourses()
         resetForm()
         
-        // Resetear campos tocados
+
         touchedFields.value = {
           title: false,
           description: false,

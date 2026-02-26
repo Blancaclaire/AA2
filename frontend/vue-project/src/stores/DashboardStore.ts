@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import api from '@/api/axios'
 
-// Interfaces que coinciden con tu backend
+
 interface DashboardKpis {
   totalCourses: number
   publishedCourses: number

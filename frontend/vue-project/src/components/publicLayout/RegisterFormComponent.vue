@@ -10,7 +10,6 @@ const showPassword = ref(false)
 const isSubmitting = ref(false)
 const submitSuccess = ref(false)
 
-// ✅ Controlar qué campos han sido tocados
 const touchedFields = ref({
   role: false,
   name: false,
@@ -55,22 +54,22 @@ const [name] = defineField('name')
 const [email] = defineField('email')
 const [password] = defineField('password')
 
-// ✅ Funciones para marcar campos como tocados
+
 const markAsTouched = (field: keyof typeof touchedFields.value) => {
   touchedFields.value[field] = true
 }
 
-// ✅ Helper para determinar el estado del campo
+
 const getFieldState = (field: keyof typeof touchedFields.value) => {
-  // Solo mostrar error si el campo ha sido tocado Y tiene error
+
   if (touchedFields.value[field] && errors.value[field]) {
     return false // Rojo
   }
-  return null // Sin estado (normal)
+  return null // Sin estado 
 }
 
 const enviarDatos = handleSubmit(async (values) => {
-  // Marcar todos los campos como tocados al intentar enviar
+
   touchedFields.value = {
     role: true,
     name: true,
@@ -97,7 +96,6 @@ const enviarDatos = handleSubmit(async (values) => {
 
   resetForm()
   
-  // Resetear campos tocados
   touchedFields.value = {
     role: false,
     name: false,

@@ -102,7 +102,7 @@ const handleCourseDetail = () => {
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
+  transition: transform 0.1s;
 }
 
 .btn-detail:hover {
