@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: cursosapp123
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql   # ← crea las tablas automáticamente
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U cursosapp -d cursosapp"]
       interval: 3s
@@ -36,10 +36,16 @@ services:
         condition: service_healthy
     restart: on-failure
 
-  # frontend:
-  #   build: { context: ./frontend, dockerfile: Dockerfile }
-  #   ports: ["80:80"]
-  #   depends_on: [backend]
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cursosapp_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: on-failure
 
 volumes:
   postgres_data:

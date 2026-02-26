@@ -1,30 +1,68 @@
 import { defineStore } from 'pinia'
 import api from '@/api/axios'
+import router from '@/router'
+
+
 
 export const useAuthStore = defineStore('AuthStore', {
   state: () => ({
     loading: false,
     error: null as string | null,
-    user: null
+    token: localStorage.getItem('token') || null,
+    role: localStorage.getItem('role') || null,
+    userName: localStorage.getItem('userName') || null,
   }),
+  getters: {
+    isAuthenticated: (state) => !!state.token,
+  },
   actions: {
+
     async login(credentials: any) {
       this.loading = true
       this.error = null
       try {
-        // ESTA ES LA PETICIÓN QUE TE FALTA
-        const response = await api.post('/auth/login', credentials)
-        console.log('Respuesta del servidor:', response.data)
-        
-        // Guardar el token que devuelve tu controlador de .NET
-        localStorage.setItem('token', response.data.token)
-        this.user = response.data.user
+        const res = await api.post('/auth/login', credentials)
+        this.token = res.data.token
+        this.role = res.data.role
+        this.userName = res.data.name
+        localStorage.setItem('token', res.data.token)
+        localStorage.setItem('role', res.data.role)
+        localStorage.setItem('userName', res.data.name)
+        return true
       } catch (err: any) {
         this.error = err.response?.data?.message || 'Error de conexión'
-        console.error('Error al loguear:', err)
+        return false
       } finally {
         this.loading = false
       }
+    },
+    async register(credentials: any) {
+      this.loading = true
+      this.error = null
+      try {
+        const res = await api.post('/auth/register', credentials)
+        this.token = res.data.token
+        this.role = res.data.role
+        this.userName = res.data.name
+        localStorage.setItem('token', res.data.token)
+        localStorage.setItem('role', res.data.role)
+        localStorage.setItem('userName', res.data.name)
+        return true
+      } catch (err: any) {
+        this.error = err.response?.data?.message || 'Error de conexión'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+    logout() {
+      this.token = null
+      this.role = null
+      this.userName = null
+      localStorage.removeItem('token')
+      localStorage.removeItem('role')
+      localStorage.removeItem('userName')
+
     }
-  }
+  },
 })

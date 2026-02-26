@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import LoginFormComponent from '@/components/publicLayout/LoginFormComponent.vue'
+import RegisterFormComponent from '@/components/publicLayout/RegisterFormComponent.vue'
 import router from '@/router'
 import { useAuthStore } from '@/stores/AuthStore'
-import { RouterLink } from 'vue-router'
 
 
 const authStore = useAuthStore()
+const handleRegisterAction = async (data: any) => {
 
-
-const handleLoginAction = async (data: any) => {
-  const success = await authStore.login(data)
+  const success = await authStore.register(data)
   if (success) {
     if (authStore.role === 'admin' || authStore.role === 'instructor') {
       await router.push('/admin/dashboard')
@@ -18,8 +16,6 @@ const handleLoginAction = async (data: any) => {
     }
   }
 }
-
-
 </script>
 
 <template>
@@ -46,18 +42,18 @@ const handleLoginAction = async (data: any) => {
       <b-col cols="12" md="6" class="bg-white d-flex align-items-center justify-content-center p-4 p-md-5">
         <div style="width: 100%; max-width: 500px;">
           <div class="mb-5 text-center text-md-start">
-            <h2 class="display-5 fw-bold text-dark">Bienvenido</h2>
-            <p class="text-muted fs-5">Introduce tus credenciales para acceder</p>
+            <h2 class="display-5 fw-bold text-dark">Créate una cuenta</h2>
+            <p class="text-muted fs-5">Completa el formulario para registrarte</p>
           </div>
 
           <b-alert v-if="authStore.error" variant="danger" show dismissible class="mb-4">
             {{ authStore.error }}
           </b-alert>
 
-          <login-form-component @submit-login="handleLoginAction"></login-form-component>
+          <register-form-component @submit-register="handleRegisterAction"
+            :disabled="authStore.loading"></register-form-component>
 
-
-          <p class="handleRegister">¿No tienes una cuenta? <router-link to="/register"> Registrate</router-link></p>
+          <p class="handleRegister">¿Ya tienes una cuenta? <router-link to="/login">Inicia sesión</router-link></p>
 
           <p class="text-center mt-2">
             <router-link to="/" class="text-muted text-decoration-none">Volver al inicio</router-link>
@@ -72,9 +68,6 @@ const handleLoginAction = async (data: any) => {
 
     </b-row>
   </b-container>
-
-
-
 </template>
 
 <style scoped>
@@ -88,8 +81,7 @@ const handleLoginAction = async (data: any) => {
   text-align: center;
 }
 
-
-.hadle .feature-dot {
+.feature-dot {
   width: 12px;
   height: 12px;
   background-color: #00d4ff;
