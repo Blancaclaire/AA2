@@ -8,7 +8,7 @@ import { RouterLink } from 'vue-router'
 const authStore = useAuthStore()
 
 
- const handleLoginAction = async (data: any) => {
+const handleLoginAction = async (data: any) => {
   const success = await authStore.login(data)
   if (success) {
     if (authStore.role === 'admin' || authStore.role === 'instructor') {
@@ -25,7 +25,7 @@ const authStore = useAuthStore()
 <template>
   <b-container fluid class="p-0 overflow-hidden">
     <b-row class="g-0 vh-100">
-      
+
       <b-col md="6" class="d-none d-md-flex info-section flex-column justify-content-center p-5 text-white">
         <div class="px-lg-5">
           <h1 class="display-3 fw-bold mb-4">CursosApp</h1>
@@ -53,12 +53,16 @@ const authStore = useAuthStore()
           <b-alert v-if="authStore.error" variant="danger" show dismissible class="mb-4">
             {{ authStore.error }}
           </b-alert>
-          
+
           <login-form-component @submit-login="handleLoginAction"></login-form-component>
 
 
           <p class="handleRegister">¿No tienes una cuenta? <router-link to="/register"> Registrate</router-link></p>
-          
+
+          <p class="text-center mt-2">
+            <router-link to="/" class="text-muted text-decoration-none">Volver al inicio</router-link>
+          </p>
+
           <p class="mt-5 text-center text-muted small">
             &copy; 2024 CursosApp S.L. Todos los derechos reservados.
           </p>
@@ -74,19 +78,18 @@ const authStore = useAuthStore()
 </template>
 
 <style scoped>
-
 .info-section {
   background: linear-gradient(135deg, #2222c4 0%, #1a1a2e 100%);
   position: relative;
 }
-.handleRegister{
+
+.handleRegister {
   margin-top: 1em;
   text-align: center;
 }
 
 
-.hadle
-.feature-dot {
+.hadle .feature-dot {
   width: 12px;
   height: 12px;
   background-color: #00d4ff;
@@ -96,7 +99,10 @@ const authStore = useAuthStore()
 .info-section::before {
   content: "";
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   opacity: 0.1;
   background-image: radial-gradient(#ffffff 1px, transparent 1px);
   background-size: 30px 30px;

@@ -55,6 +55,10 @@ const handleRegisterAction = async (data: any) => {
 
           <p class="handleRegister">¿Ya tienes una cuenta? <router-link to="/login">Inicia sesión</router-link></p>
 
+          <p class="text-center mt-2">
+            <router-link to="/" class="text-muted text-decoration-none">Volver al inicio</router-link>
+          </p>
+
           <p class="mt-5 text-center text-muted small">
             &copy; 2024 CursosApp S.L. Todos los derechos reservados.
           </p>

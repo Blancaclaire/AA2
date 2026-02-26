@@ -31,7 +31,7 @@ onMounted(() => {
   categoryStore.getCategories()
 })
 
-// Esquema de validación con Yup
+// validación con Yup
 const validationSchema = yup.object({
   title: yup.string()
     .required('El título es obligatorio')
@@ -92,8 +92,7 @@ watch(() => props.course, (newCourse) => {
       price: newCourse.price || 0,
       durationHours: newCourse.durationHours || 0
     })
-    
-    // Resetear campos tocados cuando se abre el modal con un nuevo curso
+
     touchedFields.value = {
       title: false,
       description: false,
@@ -113,21 +112,20 @@ const levelOptions = [
   { value: 'Advanced', text: 'Avanzado' }
 ]
 
-// Funciones para marcar campos como tocados
+
 const markAsTouched = (field: keyof typeof touchedFields.value) => {
   touchedFields.value[field] = true
 }
 
-// Helper para determinar el estado del campo
+
 const getFieldState = (field: keyof typeof touchedFields.value) => {
   if (touchedFields.value[field] && errors.value[field]) {
-    return false // Rojo
+    return false 
   }
-  return null // Sin estado (normal)
+  return null 
 }
 
 const handleSave = handleSubmit((values) => {
-  // Marcar todos los campos como tocados al intentar guardar
   touchedFields.value = {
     title: true,
     description: true,
@@ -144,7 +142,6 @@ const handleSave = handleSubmit((values) => {
     isPublished: true
   }
   
-  console.log('📦 Payload validado:', payload)
   
   emit('save', payload)
 })
