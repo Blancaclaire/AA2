@@ -2,7 +2,8 @@
 
 ## Arrancar
 ```bash
-docker-compose build && docker compose up
+docker-compose build
+docker compose up
 ```
 - Swagger: http://localhost:8080/swagger
 
@@ -14,6 +15,4 @@ docker-compose build && docker compose up
 | Alumno     | student@cursosapp.com      | Admin1234! |
 
 
-
-http://localhost:8080/swagger
 
