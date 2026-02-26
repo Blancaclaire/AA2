@@ -20,7 +20,8 @@ public record CourseDetailDto(int Id, string Title, string Description, string I
     bool IsEnrolled, int? UserProgress);
 
 public record CreateCourseRequest(string Title, string Description, string Instructor,
-    decimal Price, int DurationHours, string Level, string ImageUrl, int CategoryId);
+    decimal Price, int DurationHours, string Level, string ImageUrl, int CategoryId, 
+    bool IsPublished = true);
 
 public record UpdateCourseRequest(string Title, string Description, string Instructor,
     decimal Price, int DurationHours, string Level, string ImageUrl,
@@ -37,7 +38,7 @@ public class CourseSearchParams
     public decimal? MaxPrice { get; set; }
     public DateTime? DateFrom { get; set; }
     public DateTime? DateTo { get; set; }
-    public bool IsPublished { get; set; } = true;
+    public bool? IsPublished { get; set; } = true;
     public string SortBy { get; set; } = "createdAt";
     public string SortOrder { get; set; } = "desc";
     public int Page { get; set; } = 1;

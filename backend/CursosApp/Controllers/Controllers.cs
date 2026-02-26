@@ -10,7 +10,8 @@ using CursosApp.Services;
 namespace CursosApp.Controllers;
 
 // ── AUTH ──────────────────────────────────────────────────────────────────────
-[ApiController][Route("api/auth")]
+[ApiController]
+[Route("api/auth")]
 public class AuthController(AppDbContext db, IJwtService jwt) : ControllerBase
 {
     [HttpPost("login")]
@@ -35,10 +36,11 @@ public class AuthController(AppDbContext db, IJwtService jwt) : ControllerBase
         return Created("", new AuthResponse(jwt.GenerateToken(user), user.Role, user.Name, user.Email, user.Id));
     }
 
-    [Authorize][HttpGet("me")]
+    [Authorize]
+    [HttpGet("me")]
     public async Task<ActionResult> Me()
     {
-        var id   = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        var id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
         var user = await db.Users.FindAsync(id);
         if (user is null) return NotFound();
         return Ok(new { user.Id, user.Name, user.Email, user.Role, user.CreatedAt, user.LastLoginAt });
@@ -46,7 +48,8 @@ public class AuthController(AppDbContext db, IJwtService jwt) : ControllerBase
 }
 
 // ── CATEGORIES ────────────────────────────────────────────────────────────────
-[ApiController][Route("api/categories")]
+[ApiController]
+[Route("api/categories")]
 public class CategoriesController(AppDbContext db) : ControllerBase
 {
     [HttpGet]
@@ -63,7 +66,8 @@ public class CategoriesController(AppDbContext db) : ControllerBase
         return Ok(new CategoryDto(c.Id, c.Name, c.Description, c.Icon, c.IsActive, c.CreatedAt, c.Courses.Count));
     }
 
-    [Authorize(Roles = "admin")][HttpPost]
+    [Authorize(Roles = "admin")]
+    [HttpPost]
     public async Task<ActionResult> Create([FromBody] CreateCategoryRequest req)
     {
         var c = new Category { Name = req.Name, Description = req.Description, Icon = req.Icon };
@@ -71,7 +75,8 @@ public class CategoriesController(AppDbContext db) : ControllerBase
         return Created("", new CategoryDto(c.Id, c.Name, c.Description, c.Icon, c.IsActive, c.CreatedAt, 0));
     }
 
-    [Authorize(Roles = "admin")][HttpPut("{id:int}")]
+    [Authorize(Roles = "admin")]
+    [HttpPut("{id:int}")]
     public async Task<ActionResult> Update(int id, [FromBody] UpdateCategoryRequest req)
     {
         var c = await db.Categories.Include(x => x.Courses).FirstOrDefaultAsync(x => x.Id == id);
@@ -81,7 +86,8 @@ public class CategoriesController(AppDbContext db) : ControllerBase
         return Ok(new CategoryDto(c.Id, c.Name, c.Description, c.Icon, c.IsActive, c.CreatedAt, c.Courses.Count));
     }
 
-    [Authorize(Roles = "admin")][HttpDelete("{id:int}")]
+    [Authorize(Roles = "admin")]
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
         var c = await db.Categories.Include(x => x.Courses).FirstOrDefaultAsync(x => x.Id == id);
@@ -93,14 +99,15 @@ public class CategoriesController(AppDbContext db) : ControllerBase
 }
 
 // ── COURSES ───────────────────────────────────────────────────────────────────
-[ApiController][Route("api/courses")]
+[ApiController]
+[Route("api/courses")]
 public class CoursesController(AppDbContext db) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<PagedResult<CourseDto>>> Search([FromQuery] CourseSearchParams p)
     {
         var role = User.FindFirst(ClaimTypes.Role)?.Value;
-        var q    = db.Courses.Include(c => c.Category).AsQueryable();
+        var q = db.Courses.Include(c => c.Category).AsQueryable();
 
         if (role != "admin" && role != "instructor") q = q.Where(c => c.IsPublished);
         if (!string.IsNullOrWhiteSpace(p.Query))
@@ -113,22 +120,29 @@ public class CoursesController(AppDbContext db) : ControllerBase
         if (p.MinPrice.HasValue) q = q.Where(c => c.Price >= p.MinPrice);
         if (p.MaxPrice.HasValue) q = q.Where(c => c.Price <= p.MaxPrice);
         if (p.DateFrom.HasValue) q = q.Where(c => c.CreatedAt >= p.DateFrom);
-        if (p.DateTo.HasValue)   q = q.Where(c => c.CreatedAt <= p.DateTo);
-        if (p.IsPublished.HasValue && (role == "admin" || role == "instructor"))
-            q = q.Where(c => c.IsPublished == p.IsPublished);
+        if (p.DateTo.HasValue) q = q.Where(c => c.CreatedAt <= p.DateTo);
+        if (role == "admin" || role == "instructor")
+        {
+            if (p.IsPublished.HasValue)
+                q = q.Where(c => c.IsPublished == p.IsPublished);
+        }
+        else
+        {
+            q = q.Where(c => c.IsPublished);
+        }
 
         q = (p.SortBy.ToLower(), p.SortOrder.ToLower()) switch
         {
-            ("price",       "asc") => q.OrderBy(c => c.Price),
-            ("price",       _)     => q.OrderByDescending(c => c.Price),
-            ("rating",      "asc") => q.OrderBy(c => c.Rating),
-            ("rating",      _)     => q.OrderByDescending(c => c.Rating),
+            ("price", "asc") => q.OrderBy(c => c.Price),
+            ("price", _) => q.OrderByDescending(c => c.Price),
+            ("rating", "asc") => q.OrderBy(c => c.Rating),
+            ("rating", _) => q.OrderByDescending(c => c.Rating),
             ("enrollments", "asc") => q.OrderBy(c => c.EnrollmentCount),
-            ("enrollments", _)     => q.OrderByDescending(c => c.EnrollmentCount),
-            ("title",       "asc") => q.OrderBy(c => c.Title),
-            ("title",       _)     => q.OrderByDescending(c => c.Title),
-            (_,             "asc") => q.OrderBy(c => c.CreatedAt),
-            _                      => q.OrderByDescending(c => c.CreatedAt),
+            ("enrollments", _) => q.OrderByDescending(c => c.EnrollmentCount),
+            ("title", "asc") => q.OrderBy(c => c.Title),
+            ("title", _) => q.OrderByDescending(c => c.Title),
+            (_, "asc") => q.OrderBy(c => c.CreatedAt),
+            _ => q.OrderByDescending(c => c.CreatedAt),
         };
 
         var total = await q.CountAsync();
@@ -145,7 +159,7 @@ public class CoursesController(AppDbContext db) : ControllerBase
     [HttpGet("{id:int}")]
     public async Task<ActionResult> GetById(int id)
     {
-        var role   = User.FindFirst(ClaimTypes.Role)?.Value;
+        var role = User.FindFirst(ClaimTypes.Role)?.Value;
         var course = await db.Courses.Include(c => c.Category).FirstOrDefaultAsync(c => c.Id == id);
         if (course is null || (!course.IsPublished && role != "admin" && role != "instructor"))
             return NotFound(new { message = "No encontrado" });
@@ -154,7 +168,7 @@ public class CoursesController(AppDbContext db) : ControllerBase
         if (User.Identity?.IsAuthenticated == true)
         {
             var uid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            var e   = await db.Enrollments.FirstOrDefaultAsync(x => x.UserId == uid && x.CourseId == id);
+            var e = await db.Enrollments.FirstOrDefaultAsync(x => x.UserId == uid && x.CourseId == id);
             enrolled = e is not null; progress = e?.ProgressPercent;
         }
         return Ok(new CourseDetailDto(course.Id, course.Title, course.Description, course.Instructor,
@@ -163,34 +177,47 @@ public class CoursesController(AppDbContext db) : ControllerBase
             course.CategoryId, course.Category.Name, enrolled, progress));
     }
 
-    [Authorize(Roles = "admin,instructor")][HttpPost]
+    [Authorize(Roles = "admin,instructor")]
+    [HttpPost]
     public async Task<ActionResult> Create([FromBody] CreateCourseRequest req)
     {
         if (!await db.Categories.AnyAsync(c => c.Id == req.CategoryId))
             return BadRequest(new { message = "Categoría no existe" });
-        var c = new Course { Title=req.Title, Description=req.Description, Instructor=req.Instructor,
-            Price=req.Price, DurationHours=req.DurationHours, Level=req.Level, ImageUrl=req.ImageUrl, CategoryId=req.CategoryId };
+        var c = new Course
+        {
+            Title = req.Title,
+            Description = req.Description,
+            Instructor = req.Instructor,
+            Price = req.Price,
+            DurationHours = req.DurationHours,
+            Level = req.Level,
+            ImageUrl = req.ImageUrl,
+            CategoryId = req.CategoryId,
+            IsPublished = true
+        };
         db.Courses.Add(c); await db.SaveChangesAsync();
         await db.Entry(c).Reference(x => x.Category).LoadAsync();
         return Created("", ToDto(c));
     }
 
-    [Authorize(Roles = "admin,instructor")][HttpPut("{id:int}")]
+    [Authorize(Roles = "admin,instructor")]
+    [HttpPut("{id:int}")]
     public async Task<ActionResult> Update(int id, [FromBody] UpdateCourseRequest req)
     {
         var c = await db.Courses.Include(x => x.Category).FirstOrDefaultAsync(x => x.Id == id);
         if (c is null) return NotFound(new { message = "No encontrado" });
         if (!await db.Categories.AnyAsync(x => x.Id == req.CategoryId))
             return BadRequest(new { message = "Categoría no existe" });
-        c.Title=req.Title; c.Description=req.Description; c.Instructor=req.Instructor;
-        c.Price=req.Price; c.DurationHours=req.DurationHours; c.Level=req.Level;
-        c.ImageUrl=req.ImageUrl; c.IsPublished=req.IsPublished; c.CategoryId=req.CategoryId;
-        c.UpdatedAt=DateTime.UtcNow;
+        c.Title = req.Title; c.Description = req.Description; c.Instructor = req.Instructor;
+        c.Price = req.Price; c.DurationHours = req.DurationHours; c.Level = req.Level;
+        c.ImageUrl = req.ImageUrl; c.IsPublished = req.IsPublished; c.CategoryId = req.CategoryId;
+        c.UpdatedAt = DateTime.UtcNow;
         await db.SaveChangesAsync(); await db.Entry(c).Reference(x => x.Category).LoadAsync();
         return Ok(ToDto(c));
     }
 
-    [Authorize(Roles = "admin")][HttpPatch("{id:int}/publish")]
+    [Authorize(Roles = "admin")]
+    [HttpPatch("{id:int}/publish")]
     public async Task<IActionResult> TogglePublish(int id)
     {
         var c = await db.Courses.FindAsync(id);
@@ -200,7 +227,8 @@ public class CoursesController(AppDbContext db) : ControllerBase
         return Ok(new { id = c.Id, isPublished = c.IsPublished });
     }
 
-    [Authorize(Roles = "admin")][HttpDelete("{id:int}")]
+    [Authorize(Roles = "admin")]
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
         var c = await db.Courses.FindAsync(id);
@@ -209,11 +237,12 @@ public class CoursesController(AppDbContext db) : ControllerBase
         return NoContent();
     }
 
-    [Authorize][HttpPost("{id:int}/enroll")]
+    [Authorize]
+    [HttpPost("{id:int}/enroll")]
     public async Task<IActionResult> Enroll(int id)
     {
         var uid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-        var c   = await db.Courses.FindAsync(id);
+        var c = await db.Courses.FindAsync(id);
         if (c is null || !c.IsPublished) return NotFound(new { message = "No encontrado" });
         if (await db.Enrollments.AnyAsync(e => e.UserId == uid && e.CourseId == id))
             return Conflict(new { message = "Ya matriculado" });
@@ -229,7 +258,8 @@ public class CoursesController(AppDbContext db) : ControllerBase
 }
 
 // ── DASHBOARD ─────────────────────────────────────────────────────────────────
-[ApiController][Route("api/dashboard")]
+[ApiController]
+[Route("api/dashboard")]
 [Authorize(Roles = "admin,instructor")]
 public class DashboardController(AppDbContext db) : ControllerBase
 {
@@ -237,7 +267,7 @@ public class DashboardController(AppDbContext db) : ControllerBase
     public async Task<ActionResult> Get([FromQuery] DateTime? dateFrom, [FromQuery] DateTime? dateTo)
     {
         var from = dateFrom ?? DateTime.UtcNow.AddMonths(-12);
-        var to   = dateTo   ?? DateTime.UtcNow;
+        var to = dateTo ?? DateTime.UtcNow;
 
         var kpis = new DashboardKpis(
             await db.Courses.CountAsync(),
@@ -261,7 +291,7 @@ public class DashboardController(AppDbContext db) : ControllerBase
         var byMonth = await db.Enrollments.Include(e => e.Course)
             .Where(e => e.EnrolledAt >= from && e.EnrolledAt <= to)
             .GroupBy(e => new { e.EnrolledAt.Year, e.EnrolledAt.Month })
-            .Select(g => new { Label = g.Key.Year + "-" + g.Key.Month.ToString().PadLeft(2,'0'), Value = g.Sum(e => (double)e.Course.Price) })
+            .Select(g => new { Label = g.Key.Year + "-" + g.Key.Month.ToString().PadLeft(2, '0'), Value = g.Sum(e => (double)e.Course.Price) })
             .OrderBy(x => x.Label).Select(x => new ChartPoint(x.Label, x.Value)).ToListAsync();
 
         var topRating = await db.Courses.Where(c => c.IsPublished && c.Rating > 0)
@@ -273,28 +303,45 @@ public class DashboardController(AppDbContext db) : ControllerBase
 }
 
 // ── USERS ─────────────────────────────────────────────────────────────────────
-[ApiController][Route("api/users")]
+[ApiController]
+[Route("api/users")]
 public class UsersController(AppDbContext db) : ControllerBase
 {
-    [Authorize(Roles = "admin")][HttpGet]
+    [Authorize(Roles = "admin")]
+    [HttpGet]
     public async Task<ActionResult> GetAll() =>
-        Ok(await db.Users.Select(u => new { u.Id, u.Name, u.Email, u.Role, u.IsActive, u.CreatedAt, u.LastLoginAt,
-            EnrollmentCount = u.Enrollments.Count }).ToListAsync());
+        Ok(await db.Users.Select(u => new
+        {
+            u.Id,
+            u.Name,
+            u.Email,
+            u.Role,
+            u.IsActive,
+            u.CreatedAt,
+            u.LastLoginAt,
+            EnrollmentCount = u.Enrollments.Count
+        }).ToListAsync());
 
-    [Authorize(Roles = "admin")][HttpPost]
+    [Authorize(Roles = "admin")]
+    [HttpPost]
     public async Task<ActionResult> Create([FromBody] RegisterRequest req)
     {
         if (await db.Users.AnyAsync(u => u.Email == req.Email))
             return Conflict(new { message = "Email en uso" });
         var roles = new[] { "student", "instructor", "admin" };
-        var user  = new User { Name=req.Name, Email=req.Email,
-            PasswordHash=BCrypt.Net.BCrypt.HashPassword(req.Password),
-            Role=roles.Contains(req.Role) ? req.Role : "student" };
+        var user = new User
+        {
+            Name = req.Name,
+            Email = req.Email,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(req.Password),
+            Role = roles.Contains(req.Role) ? req.Role : "student"
+        };
         db.Users.Add(user); await db.SaveChangesAsync();
         return Created("", new { user.Id, user.Name, user.Email, user.Role });
     }
 
-    [Authorize(Roles = "admin")][HttpPatch("{id:int}")]
+    [Authorize(Roles = "admin")]
+    [HttpPatch("{id:int}")]
     public async Task<ActionResult> Update(int id, [FromBody] UpdateUserRequest req)
     {
         var user = await db.Users.FindAsync(id);
@@ -306,7 +353,8 @@ public class UsersController(AppDbContext db) : ControllerBase
         return Ok(new { user.Id, user.Name, user.Email, user.Role, user.IsActive });
     }
 
-    [Authorize(Roles = "admin")][HttpDelete("{id:int}")]
+    [Authorize(Roles = "admin")]
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
         var user = await db.Users.FindAsync(id);
@@ -315,7 +363,8 @@ public class UsersController(AppDbContext db) : ControllerBase
         return NoContent();
     }
 
-    [Authorize][HttpGet("me/enrollments")]
+    [Authorize]
+    [HttpGet("me/enrollments")]
     public async Task<ActionResult> MyEnrollments()
     {
         var uid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
@@ -324,11 +373,12 @@ public class UsersController(AppDbContext db) : ControllerBase
             .ToListAsync());
     }
 
-    [Authorize][HttpPost("me/progress")]
+    [Authorize]
+    [HttpPost("me/progress")]
     public async Task<IActionResult> UpdateProgress([FromBody] UpdateProgressRequest req)
     {
         var uid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-        var e   = await db.Enrollments.FirstOrDefaultAsync(x => x.UserId == uid && x.CourseId == req.CourseId);
+        var e = await db.Enrollments.FirstOrDefaultAsync(x => x.UserId == uid && x.CourseId == req.CourseId);
         if (e is null) return NotFound(new { message = "No matriculado" });
         e.ProgressPercent = Math.Clamp(req.ProgressPercent, 0, 100);
         if (e.ProgressPercent == 100 && !e.IsCompleted) { e.IsCompleted = true; e.CompletedAt = DateTime.UtcNow; }

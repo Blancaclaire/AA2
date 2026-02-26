@@ -16,7 +16,7 @@ const emit = defineEmits<{
 
 const categoryStore = useCategoryStore()
 
-// ✅ Controlar qué campos han sido tocados
+// Controlar qué campos han sido tocados
 const touchedFields = ref({
   title: false,
   description: false,
@@ -31,7 +31,7 @@ onMounted(() => {
   categoryStore.getCategories()
 })
 
-// ✅ Esquema de validación con Yup
+// Esquema de validación con Yup
 const validationSchema = yup.object({
   title: yup.string()
     .required('El título es obligatorio')
@@ -113,12 +113,12 @@ const levelOptions = [
   { value: 'Advanced', text: 'Avanzado' }
 ]
 
-// ✅ Funciones para marcar campos como tocados
+// Funciones para marcar campos como tocados
 const markAsTouched = (field: keyof typeof touchedFields.value) => {
   touchedFields.value[field] = true
 }
 
-// ✅ Helper para determinar el estado del campo
+// Helper para determinar el estado del campo
 const getFieldState = (field: keyof typeof touchedFields.value) => {
   if (touchedFields.value[field] && errors.value[field]) {
     return false // Rojo
@@ -140,7 +140,8 @@ const handleSave = handleSubmit((values) => {
 
   const payload = {
     ...values,
-    imageUrl: ''  // Siempre vacío
+    imageUrl: '',
+    isPublished: true
   }
   
   console.log('📦 Payload validado:', payload)
